@@ -12,27 +12,41 @@ export class LoginComponent {
     Username: '',
     Password: '',
   };
+  userId: string = '';
+  userData: any;
 
   constructor(private authService: AuthService) {}
+  
+  ngOnInit(): void {
+    // Call getUserData when component initializes
+    this.getUserData();
+  }
 
   login(): void {
-  this.authService.loginUser(this.loginDto).subscribe((response: IResponseDto) => {
-    // Handle response
-    if (response.isSuccess) {
-      // Login success
-      console.log('User logged in successfully');
-      // Save token and user to local storage
-      localStorage.setItem('token', response.result.token);
-      localStorage.setItem('user', JSON.stringify(response.result.user));
-    } else {
-      // Handle unsuccessful login
-      if (response.errormessage) {
-        console.error('Login failed:', response.errormessage);
-      } else {
-        console.error('Login failed: Unknown error');
-      }
-    }
-  });
-}
+    this.authService
+      .loginUser(this.loginDto)
+      .subscribe((response: IResponseDto) => {
+        // Handle response
+        if (response.isSuccess) {
+          // Login success
+          console.log('User logged in successfully');
+          // Save token and user to local storage
+          localStorage.setItem('token', response.result.token);
+          localStorage.setItem('user', JSON.stringify(response.result.user));
+        } else {
+          console.error('Login failed:', response.errormessage);
+        }
+      });
+  }
 
+  getUserData(): void {
+    this.authService.getUserById('1').subscribe((response: IResponseDto) => {
+      if (response.isSuccess) {
+        this.userData = response.result;
+        console.log('User data:', this.userData);
+      } else {
+        console.log('Failed to get user data:', response.errormessage);
+      }
+    });
+  }
 }
