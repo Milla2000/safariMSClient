@@ -6,10 +6,11 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
+// import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { FooterComponent } from './app/footer/footer.component';
+import { LoginComponent } from './login/login.component';
+
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { FooterComponent } from './app/footer/footer.component';
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
-    FooterComponent,
+    // FooterComponent
   ],
   imports: [
     BrowserModule,

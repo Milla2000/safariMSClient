@@ -1,0 +1,48 @@
+/* navbar.component.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #a71b1b;
+  padding: 10px;
+}
+
+.navbar-left .logo {
+  height: 40px;
+}
+
+.navbar-center .nav-link {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right .list-link {
+  color: white;
+  text-decoration: none;
+  position: relative;
+  margin-right: 15px;
+}
+
+.navbar-right .notification-badge {
+  background-color: black;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 5px;
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  font-size: 12px;
+}
+
+.navbar-right .search-bar {
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+}
