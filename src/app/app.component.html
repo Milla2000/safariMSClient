@@ -3,3 +3,15 @@
 <app-dashboard></app-dashboard>
 <app-first-section></app-first-section>
 <app-footer></app-footer>
+<div class="tour-packages">
+  <app-tour-card
+    *ngFor="let tour of tours"
+    [image]="tour.image"
+    [location]="tour.location"
+    [title]="tour.title"
+    [rating]="tour.rating"
+    [reviews]="tour.reviews"
+    [price]="tour.price"
+    [discount]="tour.discount"
+  ></app-tour-card>
+</div>

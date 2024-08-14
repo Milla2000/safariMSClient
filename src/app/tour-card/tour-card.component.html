@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card-image">
+        <img [src]="image" alt="Tour Image">
+        <div class="badge" *ngIf="discount">{{ discount }}% Off</div>
+    </div>
+    <div class="card-content">
+        <div class="location">{{ location }}</div>
+        <h3 class="title">{{ title }}</h3>
+        <div class="rating">
+            <span *ngFor="let star of stars">&#9733;</span>
+            <span class="rating-number">{{ rating }} ({{ reviews }} reviews)</span>
+        </div>
+        <div class="price">{{ price | currency }} / Day</div>
+    </div>
+    <button class="explore-btn">Explore Now</button>
+</div>

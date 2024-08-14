@@ -12,6 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { FirstSectionComponent } from './first-section/first-section.component';
+import { TourCardComponent } from './tour-card/tour-card.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { FirstSectionComponent } from './first-section/first-section.component';
     DashboardComponent,
     FooterComponent,
     FirstSectionComponent,
+    TourCardComponent,
     // FooterComponent
   ],
   imports: [
