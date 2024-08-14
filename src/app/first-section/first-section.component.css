@@ -1,0 +1,88 @@
+/* first-section.component.css */
+.first-section {
+  position: relative;
+  height: 70vh; /* Full height of the viewport */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Prevents image from overflowing */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/pexels-saikat-ghosh-323099-914128.jpg'); /* Correct path */
+  background-size: cover;
+  background-position: center;
+  opacity: 0.9; /* Adjust opacity as needed */
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 60px 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.content-wrapper {
+  flex: 1;
+  color: #ffffff; /* Ensure text color contrasts with the background */
+}
+
+.section-title {
+  font-size: 46px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.section-description {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.cta-button {
+  padding: 15px 30px;
+  background-color: #e74c3c;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #c0392b;
+}
+
+.image-wrapper {
+  flex: 1;
+  text-align: center;
+}
+
+.section-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}

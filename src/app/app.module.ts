@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
+import { FooterComponent } from './footer/footer.component';
+import { FirstSectionComponent } from './first-section/first-section.component';
 
 
 @NgModule({
@@ -18,6 +20,8 @@ import { LoginComponent } from './login/login.component';
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
+    FooterComponent,
+    FirstSectionComponent,
     // FooterComponent
   ],
   imports: [
