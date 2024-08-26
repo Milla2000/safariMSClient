@@ -1,16 +1,50 @@
-<div class="card">
+<button class="add-tour-btn" (click)="toggleForm()">Add Tour</button>
+
+<div *ngIf="showForm" class="add-tour-form">
+    <h2>Add a New Tour</h2>
+    <form (ngSubmit)="onSubmit()" #tourForm="ngForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="safariName">Safari Name</label>
+            <input type="text" id="safariName" [(ngModel)]="newTour.safariName" name="safariName" required>
+        </div>
+        <div class="form-group">
+            <label for="safariDescription">Safari Description</label>
+            <textarea id="safariDescription" [(ngModel)]="newTour.safariDescription" name="safariDescription"
+                required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" [(ngModel)]="newTour.startDate" name="startDate" required>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" id="endDate" [(ngModel)]="newTour.endDate" name="endDate" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" id="price" [(ngModel)]="newTour.price" name="price" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Upload Images</label>
+            <input type="file" id="image" (change)="onFilesSelected($event)" multiple required>
+        </div>
+        <button type="submit" class="explore-btn">Add Tour</button>
+    </form>
+</div>
+
+<div *ngFor="let tour of tours" class="card">
     <div class="card-image">
-        <img [src]="image" alt="Tour Image">
-        <div class="badge" *ngIf="discount">{{ discount }}% Off</div>
+        <img [src]="tour.safariImages[0]?.image || 'default-image.jpg'" alt="Tour Image">
+        <div class="badge" *ngIf="tour.discount">{{ tour.discount }}% Off</div>
     </div>
     <div class="card-content">
-        <div class="location">{{ location }}</div>
-        <h3 class="title">{{ title }}</h3>
+        <div class="location">{{ tour.safariDescription }}</div>
+        <h3 class="title">{{ tour.safariName }}</h3>
         <div class="rating">
-            <span *ngFor="let star of stars">&#9733;</span>
-            <span class="rating-number">{{ rating }} ({{ reviews }} reviews)</span>
+            <span *ngFor="let star of getStars(tour.rating)">&#9733;</span>
+            <span class="rating-number">{{ tour.rating }} ({{ tour.reviews }} reviews)</span>
         </div>
-        <div class="price">{{ price | currency }} / Day</div>
+        <div class="price">{{ tour.price | currency:'Ksh' }} / Day</div>
     </div>
     <button class="explore-btn">Explore Now</button>
 </div>

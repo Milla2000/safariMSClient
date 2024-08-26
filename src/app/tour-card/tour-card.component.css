@@ -1,72 +1,49 @@
-.card {
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  background-color: #fff;
-  text-align: center;
-  width: 250px;
-  margin: 10px;
-}
-
-.card-image {
-  position: relative;
-}
-
-.card-image img {
-  width: 100%;
-  height: auto;
-}
-
-.badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: red;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.card-content {
-  padding: 15px;
-}
-
-.location {
-  color: #ff4081;
-  font-weight: bold;
-}
-
-.title {
-  margin: 10px 0;
-  font-size: 18px;
-}
-
-.rating {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.rating .rating-number {
-  margin-left: 5px;
-}
-
-.price {
-  margin: 15px 0;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.explore-btn {
+.add-tour-btn {
   background-color: #ff4081;
   color: white;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
-  width: 100%;
-  border-radius: 0 0 10px 10px;
+  margin: 20px 0;
+  border-radius: 5px;
 }
 
-.explore-btn:hover {
+.add-tour-btn:hover {
   background-color: #e91e63;
+}
+
+.add-tour-form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.add-tour-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.explore-btn {
+  width: 100%;
+  margin-top: 10px;
 }

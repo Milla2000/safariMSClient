@@ -12,7 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { FirstSectionComponent } from './first-section/first-section.component';
-import { TourCardComponent } from './tour-card/tour-card.component';
+import { TourComponent } from './tour-card/tour-card.component';
 
 
 @NgModule({
@@ -23,15 +23,10 @@ import { TourCardComponent } from './tour-card/tour-card.component';
     DashboardComponent,
     FooterComponent,
     FirstSectionComponent,
-    TourCardComponent,
+    TourComponent,
     // FooterComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule, 
-    HttpClientModule, 
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })
