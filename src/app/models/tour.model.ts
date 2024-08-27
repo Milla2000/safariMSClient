@@ -21,3 +21,13 @@ export interface IToursandImagesResponseDto {
   price: number;
   tourImages: ITourImageDto[];
 }
+
+export interface ITour {
+  id: string;
+  safariName: string;
+  safariDescription: string;
+  safariImages: ITourImageDto[];
+  startDate: Date;
+  endDate: Date;
+  price: number;
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TourService, Tour } from './services/tour.service';
+import { TourService } from './services/tour.service';
+import {  ITour } from './models/tour.model';
 
 @Component({
   selector: 'app-root',
@@ -7,12 +8,12 @@ import { TourService, Tour } from './services/tour.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  tours: Tour[] = [];
+  tours: ITour[] = [];
 
   constructor(private tourService: TourService) {}
 
   ngOnInit(): void {
-    this.tourService.getTours().subscribe((data) => {
+    this.tourService.getAllTours().subscribe((data) => {
       this.tours = data;
     });
   }
