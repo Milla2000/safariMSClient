@@ -32,19 +32,19 @@
     </form>
 </div>
 
-<!-- <div *ngFor="let tour of tours" class="card">
+<div *ngFor="let tour of tours" class="card">
     <div class="card-image">
-        <img [src]="tour.safariImages[0]?.image || 'default-image.jpg'" alt="Tour Image">
-        <div class="badge" *ngIf="tour.discount">{{ tour.discount }}% Off</div>
+        <img [src]="tour.tourImages[0]?.image || 'default-image.jpg'" alt="Tour Image">
+        <!-- <div class="badge" *ngIf="tour.discount">{{ tour.discount }}% Off</div> -->
     </div>
     <div class="card-content">
         <div class="location">{{ tour.safariDescription }}</div>
         <h3 class="title">{{ tour.safariName }}</h3>
         <div class="rating">
-            <span *ngFor="let star of getStars(tour.rating)">&#9733;</span>
-            <span class="rating-number">{{ tour.rating }} ({{ tour.reviews }} reviews)</span>
+            <!-- <span *ngFor="let star of getStars(tour.rating)">&#9733;</span> -->
+            <!-- <span class="rating-number">{{ tour.rating }} ({{ tour.reviews }} reviews)</span> -->
         </div>
         <div class="price">{{ tour.price | currency:'Ksh' }} / Day</div>
     </div>
     <button class="explore-btn">Explore Now</button>
-</div> -->
+</div>

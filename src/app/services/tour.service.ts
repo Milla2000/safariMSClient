@@ -8,9 +8,9 @@ import { IAddTourDto, ITourImageDto } from '../models/tour.model'; // Adjust the
   providedIn: 'root',
 })
 export class TourService {
-  private apiUrl = 'https://localhost:7032/api/Tour'; // Your API URL
+  private apiUrl = 'http://localhost:5079/api/Tour'; 
   private cloudinaryUploadUrl =
-    'https://api.cloudinary.com/v1_1/milla2000/upload'; // Replace with your Cloudinary upload URL
+    'https://api.cloudinary.com/v1_1/milla2000/upload'; // Cloudinary upload URL
 
   constructor(private http: HttpClient) {}
 
@@ -22,7 +22,7 @@ export class TourService {
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'milla2000'); // Replace with your Cloudinary upload preset
+    formData.append('upload_preset', 'milla2000'); //  Cloudinary upload preset
 
     return this.http
       .post<{ secure_url: string }>(this.cloudinaryUploadUrl, formData)
