@@ -29,10 +29,11 @@ export class LoginComponent {
         // Handle response
         if (response.isSuccess) {
           // Login success
-          console.log('User logged in successfully');
+          console.log('User logged in successfully', response);
           // Save token and user to local storage
           localStorage.setItem('token', response.result.token);
           localStorage.setItem('user', JSON.stringify(response.result.user));
+          localStorage.setItem('role', response.result.role);
         } else {
           console.error('Login failed:', response.errormessage);
         }

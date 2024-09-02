@@ -11,7 +11,9 @@ export interface IResponseDto {
   result: {
     token: string;
     user: UserDto;
+    role: string;
   };
+
   isSuccess: boolean;
 }
 
@@ -30,10 +32,11 @@ export interface UserDto {
 }
 
 
-export interface LoginResponseDto{
-    Token: string;
-    User: UserDto;
-}
+// export interface LoginResponseDto{
+//     Token: string;
+//     User: UserDto;
+//     Role: string;
+// }
 
 
 export interface AssignRoleDto {

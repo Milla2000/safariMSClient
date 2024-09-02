@@ -7,7 +7,7 @@ import {
   ILoginRequestDto,
   IResponseDto,
   IUserDto,
-  LoginResponseDto,
+  // LoginResponseDto,
 } from '../models/user.model';
 
 @Injectable({
@@ -49,5 +49,9 @@ export class AuthService {
         return response;
       })
     );
+  }
+  // AuthService
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }
