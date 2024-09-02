@@ -41,13 +41,15 @@ export class LoginComponent {
   }
 
   getUserData(): void {
-    this.authService.getUserById('1').subscribe((response: IResponseDto) => {
-      if (response.isSuccess) {
-        this.userData = response.result;
-        console.log('User data:', this.userData);
-      } else {
-        console.log('Failed to get user data:', response.errormessage);
-      }
-    });
+    this.authService
+      .getUserById('e23f78bf-6fe8-4aab-a96a-59ba86054299')
+      .subscribe((response: IResponseDto) => {
+        if (response.isSuccess) {
+          this.userData = response.result;
+          console.log('User data:', this.userData);
+        } else {
+          console.log('Failed to get user data:', response.errormessage);
+        }
+      });
   }
 }
