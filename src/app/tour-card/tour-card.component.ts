@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TourService } from '../services/tour.service';
-import { IToursandImagesResponseDto, IAddTourDto } from '../models/tour.model'; // Adjust the path as needed
+import { IToursandImagesResponseDto, IAddTourDto } from '../models/tour.model'; 
 import { firstValueFrom } from 'rxjs';
+import { CloudinaryService } from '../services/cloudinary-signature.service';
 
 @Component({
   selector: 'app-tour',
@@ -21,7 +22,10 @@ export class TourComponent implements OnInit {
   };
   selectedFiles: File[] = []; // Holds the selected files
 
-  constructor(private tourService: TourService) {}
+  constructor(
+    private tourService: TourService,
+    private cloudinaryService: CloudinaryService
+  ) {}
 
   ngOnInit(): void {
     this.getTours();
@@ -47,8 +51,11 @@ export class TourComponent implements OnInit {
     this.showForm = !this.showForm;
   }
 
-  onFilesSelected(event: any): void {
-    this.selectedFiles = Array.from(event.target.files);
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement; // Cast event.target to HTMLInputElement
+    if (input.files) {
+      this.selectedFiles = Array.from(input.files); // Convert FileList to Array
+    }
   }
 
   async onSubmit(): Promise<void> {
@@ -58,11 +65,20 @@ export class TourComponent implements OnInit {
     }
 
     try {
+      // Generate a signature for each upload
+      const signatureData = await firstValueFrom(
+        this.cloudinaryService.getSignature()
+      );
+      console.log('Signature data:', signatureData);
+      // Use `Promise.all` to handle multiple uploads and get an array of URLs
       const uploadPromises = this.selectedFiles.map((file) =>
-        firstValueFrom(this.tourService.uploadImage(file))
+        firstValueFrom(this.cloudinaryService.uploadImage(file, signatureData))
       );
 
+      // Wait for all upload promises to resolve
       const imageUrls = await Promise.all(uploadPromises);
+
+      // Update `newTour.safariImages` with the URLs wrapped in objects
       this.newTour.safariImages = imageUrls.map((url) => ({ image: url }));
 
       await this.addTour();
