@@ -37,9 +37,9 @@ export class TourComponent implements OnInit {
       this.tours = data.result.map((tour: IToursandImagesResponseDto) => {
         return {
           ...tour,
-          rating: 4.5, // Example rating; replace with actual data
-          reviews: 120, // Example reviews count; replace with actual data
-          discount: tour.price > 100 ? 10 : null, // Example discount logic; adjust as needed
+          rating: 4.5, 
+          reviews: 120, 
+          discount: tour.price > 100 ? 10 : null, 
         };
       });
     } catch (error) {
@@ -70,7 +70,7 @@ export class TourComponent implements OnInit {
         this.cloudinaryService.getSignature()
       );
       console.log('Signature data:', signatureData);
-      // Use `Promise.all` to handle multiple uploads and get an array of URLs
+      //Promise.all` to handle multiple uploads and get an array of URLs
       const uploadPromises = this.selectedFiles.map((file) =>
         firstValueFrom(this.cloudinaryService.uploadImage(file, signatureData))
       );
@@ -91,7 +91,7 @@ export class TourComponent implements OnInit {
     try {
       await firstValueFrom(this.tourService.addTour(this.newTour));
       alert('Tour added successfully!');
-      await this.getTours(); // Refresh the list of tours
+      await this.getTours(); 
       this.resetForm();
       this.showForm = false;
     } catch (error) {
