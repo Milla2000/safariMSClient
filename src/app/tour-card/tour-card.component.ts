@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TourService } from '../services/tour.service';
-import { IToursandImagesResponseDto, IAddTourDto } from '../models/tour.model'; 
+import { IToursandImagesResponseDto, IAddTourDto } from '../models/tour.model';
 import { firstValueFrom } from 'rxjs';
 import { CloudinaryService } from '../services/cloudinary-signature.service';
 
@@ -37,9 +37,9 @@ export class TourComponent implements OnInit {
       this.tours = data.result.map((tour: IToursandImagesResponseDto) => {
         return {
           ...tour,
-          rating: 4.5, 
-          reviews: 120, 
-          discount: tour.price > 100 ? 10 : null, 
+          rating: 4.5,
+          reviews: 120,
+          discount: tour.price > 100 ? 10 : null,
         };
       });
     } catch (error) {
@@ -52,9 +52,10 @@ export class TourComponent implements OnInit {
   }
 
   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement; // Cast event.target to HTMLInputElement
+    // Cast event.target to HTMLInputElement
+    const input = event.target as HTMLInputElement;
     if (input.files) {
-      this.selectedFiles = Array.from(input.files); // Convert FileList to Array
+      this.selectedFiles = Array.from(input.files);
     }
   }
 
@@ -69,17 +70,21 @@ export class TourComponent implements OnInit {
       const signatureData = await firstValueFrom(
         this.cloudinaryService.getSignature()
       );
+
       console.log('Signature data:', signatureData);
-      //Promise.all` to handle multiple uploads and get an array of URLs
       const uploadPromises = this.selectedFiles.map((file) =>
         firstValueFrom(this.cloudinaryService.uploadImage(file, signatureData))
       );
 
-      // Wait for all upload promises to resolve
       const imageUrls = await Promise.all(uploadPromises);
+      console.log('Image URLs:', imageUrls);
 
-      // Update `newTour.safariImages` with the URLs wrapped in objects
-      this.newTour.safariImages = imageUrls.map((url) => ({ image: url }));
+      // this.newTour.safariImages = imageUrls.map((url) => ({ image: url }));
+      this.newTour.safariImages = imageUrls.map(
+        (url) => url.secure_url || url.url
+      );
+
+      console.log('New tour with images:', this.newTour.safariImages);
 
       await this.addTour();
     } catch (error) {
@@ -89,9 +94,10 @@ export class TourComponent implements OnInit {
 
   async addTour(): Promise<void> {
     try {
+      console.log('New tour:', this.newTour);
       await firstValueFrom(this.tourService.addTour(this.newTour));
       alert('Tour added successfully!');
-      await this.getTours(); 
+      await this.getTours();
       this.resetForm();
       this.showForm = false;
     } catch (error) {

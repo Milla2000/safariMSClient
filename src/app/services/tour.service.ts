@@ -14,24 +14,12 @@ export class TourService {
   constructor(private http: HttpClient) {}
 
   getAllTours(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+    return this.http.get<any>(this.apiUrl + '/getAllTours');
   }
 
-  // Method to upload the image to Cloudinary
-  // uploadImage(file: File): Observable<string> {
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-  //   formData.append('upload_preset', 'milla2000'); //  Cloudinary upload preset
-
-  //   return this.http
-  //     .post<{ secure_url: string }>(this.cloudinaryUploadUrl, formData)
-  //     .pipe(
-  //       map((response) => response.secure_url) // Extract the image URL from the response
-  //     );
-  // }
 
   addTour(tourData: IAddTourDto): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}`, tourData);
+    return this.http.post<any>(`${this.apiUrl + '/AddNewTour'}`, tourData);
   }
   
 }

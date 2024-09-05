@@ -50,8 +50,14 @@ export class AuthService {
       })
     );
   }
-  // AuthService
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  // AuthService to get token and role
+  // getToken(): string | null {
+  //   return localStorage.getItem('token');
+  // }
+  // AuthService to get token and role
+  getTokenandRole(): { token: string | null; role: string | null } {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    return { token: token, role: role };
   }
 }

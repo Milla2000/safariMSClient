@@ -8,7 +8,7 @@ export interface IAddTourDto {
   startDate: Date;
   endDate: Date;
   price: number;
-  safariImages: ITourImageDto[];
+  safariImages: string[];
 }
 
 export interface IToursandImagesResponseDto {

@@ -17,7 +17,9 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = this.authService.getToken();
+    const token = this.authService.getTokenandRole().token;
+    const role = this.authService.getTokenandRole().role;
+
 
     // Check if the request URL is for Cloudinary
     if (req.url.includes('api.cloudinary.com')) {
