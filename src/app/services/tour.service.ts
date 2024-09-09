@@ -9,7 +9,7 @@ import { IAddTourDto, ITourImageDto } from '../models/tour.model'; // Adjust the
   providedIn: 'root',
 })
 export class TourService {
-  private apiUrl = 'http://localhost:5079/api/Tour'; 
+  private apiUrl = 'http://localhost:5079/api/Tour';
 
   constructor(private http: HttpClient) {}
 
@@ -17,9 +17,16 @@ export class TourService {
     return this.http.get<any>(this.apiUrl + '/getAllTours');
   }
 
-
   addTour(tourData: IAddTourDto): Observable<any> {
     return this.http.post<any>(`${this.apiUrl + '/AddNewTour'}`, tourData);
   }
-  
+
+  getTourById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl + '/getATour'}/${id}`);
+  }
+
+  addImage(tourId: string, imageUrl: string): Observable<any> {
+    const payload = { imageUrl };
+    return this.http.post(`${this.apiUrl}/Images/${tourId}`, payload);
+  }
 }

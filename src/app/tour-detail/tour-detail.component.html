@@ -1,0 +1,17 @@
+<div *ngIf="tour" class="tour-detail">
+    <h2>{{ tour.safariName }}</h2>
+    <div class="tour-images">
+        <img *ngFor="let image of tour.tourImages" [src]="image?.image || 'default-image.jpg'" alt="Tour Image" />
+    </div>
+    <p>{{ tour.safariDescription }}</p>
+    <p><strong>Start Date:</strong> {{ tour.startDate | date }}</p>
+    <p><strong>End Date:</strong> {{ tour.endDate | date }}</p>
+    <p><strong>Price:</strong> {{ tour.price | currency:'Ksh' }}</p>
+    <button class="explore-btn">Book Now</button>
+    <!-- New button to open modal -->
+    <button (click)="openAddImageModal()">Add Image</button>
+</div>
+
+<div *ngIf="!tour" class="loading">
+    <p>Loading tour details...</p>
+</div>

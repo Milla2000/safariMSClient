@@ -5,31 +5,34 @@ import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TourComponent } from './tour-card/tour-card.component';
 import { RoleGuard, AuthGuard } from './auth/role.guard';
+import { TourDetailComponent } from './tour-detail/tour-detail.component';
 // import {  } from '@angular/router';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-    // canActivate: [AuthGuard], 
-  },
+  { path: 'tour/:id', component: TourDetailComponent },
+  //  {
+  //     path: 'dashboard',
+  //     component: DashboardComponent,
+  //     // canActivate: [AuthGuard],
+  //   },
 
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  // { path: '', redirectTo: '/login', pathMatch: 'full' },
 
   {
     path: 'tour',
     component: TourComponent,
-    canActivate: [AuthGuard, (route: ActivatedRouteSnapshot) => RoleGuard(route)], 
-    data: { role: 'admin' }, 
+    canActivate: [
+      AuthGuard,
+      (route: ActivatedRouteSnapshot) => RoleGuard(route),
+    ],
+    data: { role: 'admin' },
   },
-  
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-
 export class AppRoutingModule {}

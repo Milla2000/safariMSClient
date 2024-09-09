@@ -1,0 +1,15 @@
+<!-- add-tour-image-modal.component.html -->
+<h2 mat-dialog-title>Add Image</h2>
+<div mat-dialog-content>
+    <form (ngSubmit)="onSubmit()" #imageForm="ngForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Image URL</mat-label>
+            <input matInput placeholder="Enter image URL" [(ngModel)]="imageUrl" name="imageUrl" required>
+        </mat-form-field>
+        <br />
+        <button mat-raised-button color="primary" type="submit">Add Image</button>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onClose()">Cancel</button>
+</div>
