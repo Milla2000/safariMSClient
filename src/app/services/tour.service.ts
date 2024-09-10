@@ -25,8 +25,11 @@ export class TourService {
     return this.http.get<any>(`${this.apiUrl + '/getATour'}/${id}`);
   }
 
-  addImage(tourId: string, imageUrl: string): Observable<any> {
-    const payload = { imageUrl };
-    return this.http.post(`${this.apiUrl}/Images/${tourId}`, payload);
+  addImages(tourId: string, imageUrls: string[]): Observable<any> {
+    const payload = imageUrls.map((imageUrl) => ({ image: imageUrl })); // Convert image URLs to AddTourImageDto
+    return this.http.post(
+      `http://localhost:5079/api/Images/${tourId}`,
+      payload
+    );
   }
 }

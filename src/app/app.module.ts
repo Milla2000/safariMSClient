@@ -16,7 +16,7 @@ import { TourComponent } from './tour-card/tour-card.component';
 import { RoleGuard } from './auth/role.guard';
 import { AuthService } from './services//auth.service';
 import { TourDetailComponent } from './tour-detail/tour-detail.component';
-import { AddTourImageModalComponent } from './add-tour-image-modal/add-tour-image-modal.component';
+
 
 
 @NgModule({
@@ -29,7 +29,6 @@ import { AddTourImageModalComponent } from './add-tour-image-modal/add-tour-imag
     FirstSectionComponent,
     TourComponent,
     TourDetailComponent,
-    AddTourImageModalComponent,
     // FooterComponent
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
