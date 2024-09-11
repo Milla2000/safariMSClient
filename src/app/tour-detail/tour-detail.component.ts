@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CloudinaryService } from '../services/cloudinary-signature.service';
-import { TourService } from '../services/tour.service'; // Ensure the correct path to your service
+import { TourService } from '../services/tour.service';
+import { HotelService } from '../services/hotel.service';
+import { IHotelResponseDto, IAddHotelDto } from '../models/hotel.model';
 import {
   IToursandImagesResponseDto,
   ITourImageDto,
@@ -15,20 +17,33 @@ import { firstValueFrom } from 'rxjs';
 })
 export class TourDetailComponent implements OnInit {
   tour: IToursandImagesResponseDto | null = null;
+  hotels: IHotelResponseDto[] = [];
   tourId: string | null = null;
-  isAddImageModalOpen: boolean = false; // Track modal visibility
+  isAddImageModalOpen: boolean = false;
+  isAddHotelModalOpen: boolean = false;
   selectedFiles: File[] = []; // Store multiple files
+
+  // Variables for new hotel addition
+  newHotel: IAddHotelDto = {
+    name: '',
+    tourId: '',
+    adultPrice: 0,
+    kidsPrice: 0,
+  };
 
   constructor(
     private route: ActivatedRoute,
     private tourService: TourService,
+    private hotelService: HotelService,
     private cloudinaryService: CloudinaryService
   ) {}
 
   ngOnInit(): void {
     this.tourId = this.route.snapshot.paramMap.get('id');
     if (this.tourId) {
+      this.newHotel.tourId = this.tourId;
       this.getTour(this.tourId);
+      this.getHotels(this.tourId);
     }
   }
 
@@ -44,6 +59,19 @@ export class TourDetailComponent implements OnInit {
     }
   }
 
+  // New method to fetch hotels by TourId
+  async getHotels(tourId: string): Promise<void> {
+    try {
+      const hotelData = await firstValueFrom(
+        this.hotelService.getHotelsByTourId(tourId)
+      );
+      this.hotels = hotelData; // Assign the fetched hotels to the component's hotels array
+      console.log('Hotels:', this.hotels);
+    } catch (error) {
+      console.error('Error fetching hotels:', error);
+    }
+  }
+
   // Open the modal
   openAddImageModal(): void {
     this.isAddImageModalOpen = true;
@@ -53,6 +81,46 @@ export class TourDetailComponent implements OnInit {
   closeAddImageModal(): void {
     this.isAddImageModalOpen = false;
     this.selectedFiles = []; // Reset file selection
+  }
+
+  // Open the Add Hotel Modal
+  openAddHotelModal(): void {
+    this.isAddHotelModalOpen = true;
+  }
+
+  // Close the Add Hotel Modal
+  closeAddHotelModal(): void {
+    this.isAddHotelModalOpen = false;
+    this.newHotel = {
+      name: '',
+      tourId: this.tourId!,
+      adultPrice: 0,
+      kidsPrice: 0,
+    }; // Reset the form
+  }
+
+  // Add new hotel to the tour
+  async addHotel(): Promise<void> {
+    if (
+      this.newHotel.name &&
+      this.newHotel.adultPrice &&
+      this.newHotel.kidsPrice
+    ) {
+      try {
+        const result = await firstValueFrom(
+          this.hotelService.addHotel(this.newHotel)
+        );
+        console.log('Hotel added:', result);
+
+        // Update the list of hotels after adding the new one
+        await this.getHotels(this.tourId!);
+        this.closeAddHotelModal(); // Close the modal after successful addition
+      } catch (error) {
+        console.error('Error adding hotel:', error);
+      }
+    } else {
+      console.error('Please fill all the hotel details');
+    }
   }
 
   // Handle multiple file selection

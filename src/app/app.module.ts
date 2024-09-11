@@ -16,6 +16,7 @@ import { TourComponent } from './tour-card/tour-card.component';
 import { RoleGuard } from './auth/role.guard';
 import { AuthService } from './services//auth.service';
 import { TourDetailComponent } from './tour-detail/tour-detail.component';
+import { HotelCardComponent } from './hotel-card/hotel-card.component';
 
 
 
@@ -29,6 +30,7 @@ import { TourDetailComponent } from './tour-detail/tour-detail.component';
     FirstSectionComponent,
     TourComponent,
     TourDetailComponent,
+    HotelCardComponent,
     // FooterComponent
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],

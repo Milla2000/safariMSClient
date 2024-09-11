@@ -10,10 +10,26 @@
     <button class="explore-btn">Book Now</button>
     <!-- New button to open modal -->
     <button (click)="openAddImageModal()">Add Image</button>
+    <!-- Button to open Add Hotel Modal -->
+    <button (click)="openAddHotelModal()">Add Hotel</button>
 </div>
 
 <div *ngIf="!tour" class="loading">
     <p>Loading tour details...</p>
+</div>
+
+
+<!--section for displaying hotels -->
+<div *ngIf="hotels.length > 0" class="hotels-list">
+    <h3>Hotels for this Tour</h3>
+    <div *ngFor="let hotel of hotels" class="hotel-card">
+        <h4>{{ hotel.name }}</h4>
+        <p><strong>Adult Price:</strong> {{ hotel.adultPrice | currency:'Ksh' }}</p>
+        <p><strong>Kids Price:</strong> {{ hotel.kidsPrice | currency:'Ksh' }}</p>
+        <!-- Hard-coded Address and Rating -->
+        <p><strong>Address:</strong> 123 Example Street, Nairobi</p>
+        <p><strong>Rating:</strong> 4.5 / 5</p>
+    </div>
 </div>
 
 
@@ -29,6 +45,38 @@
             <input type="file" id="imageFiles" (change)="onFilesSelected($event)" multiple />
 
             <button type="submit">Add Images</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+<!-- Add Hotel Modal -->
+<div *ngIf="isAddHotelModalOpen" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Add New Hotel</h3>
+        <form (ngSubmit)="addHotel()">
+            <div class="form-group">
+                <label for="hotelName">Hotel Name:</label>
+                <input id="hotelName" [(ngModel)]="newHotel.name" name="hotelName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="adultPrice">Adult Price:</label>
+                <input id="adultPrice" type="number" [(ngModel)]="newHotel.adultPrice" name="adultPrice" required>
+            </div>
+
+            <div class="form-group">
+                <label for="kidsPrice">Kids Price:</label>
+                <input id="kidsPrice" type="number" [(ngModel)]="newHotel.kidsPrice" name="kidsPrice" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" (click)="closeAddHotelModal()">Cancel</button>
+            </div>
         </form>
     </div>
 </div>
