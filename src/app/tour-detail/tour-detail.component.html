@@ -12,6 +12,8 @@
     <button (click)="openAddImageModal()">Add Image</button>
     <!-- Button to open Add Hotel Modal -->
     <button (click)="openAddHotelModal()">Add Hotel</button>
+    <!-- Button to navigate to the hotel component -->
+    <button *ngFor="let hotel of hotels" (click)="navigateToHotel(hotel.result.id)">Get Hotel</button>
 </div>
 
 <div *ngIf="!tour" class="loading">
@@ -23,9 +25,9 @@
 <div *ngIf="hotels.length > 0" class="hotels-list">
     <h3>Hotels for this Tour</h3>
     <div *ngFor="let hotel of hotels" class="hotel-card">
-        <h4>{{ hotel.name }}</h4>
-        <p><strong>Adult Price:</strong> {{ hotel.adultPrice | currency:'Ksh' }}</p>
-        <p><strong>Kids Price:</strong> {{ hotel.kidsPrice | currency:'Ksh' }}</p>
+        <h4>{{ hotel.result.name }}</h4>
+        <p><strong>Adult Price:</strong> {{ hotel.result.adultPrice | currency:'Ksh' }}</p>
+        <p><strong>Kids Price:</strong> {{ hotel.result.kidsPrice | currency:'Ksh' }}</p>
         <!-- Hard-coded Address and Rating -->
         <p><strong>Address:</strong> 123 Example Street, Nairobi</p>
         <p><strong>Rating:</strong> 4.5 / 5</p>

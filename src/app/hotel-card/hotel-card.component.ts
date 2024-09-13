@@ -12,7 +12,6 @@ import { IHotelResponseDto } from '../models/hotel.model';
 export class HotelCardComponent implements OnInit {
   hotel: IHotelResponseDto | null = null; // Single hotel data
   hotelId: string | null = null; // Hotel Id captured from route
-
   constructor(
     private hotelService: HotelService,
     private route: ActivatedRoute // For getting hotel Id from the route
@@ -27,12 +26,13 @@ export class HotelCardComponent implements OnInit {
 
   async getHotel(id: string): Promise<void> {
     try {
-      const data = await firstValueFrom(this.hotelService.getHotelById(id)); // Fetch hotel by Id
+      const data = await firstValueFrom(this.hotelService.getHotelById(id)); 
       this.hotel = {
-        ...data.result, // Spread existing hotel properties
-        rating: 4.5, // Example: Add default rating
-        reviews: 120, // Example: Add default review count
-        discount: data.result.price > 100 ? 10 : null, // Example: Conditionally add discount
+        rating: 4.5, 
+        reviews: 120, 
+        errormessage: data.errormessage,
+        result: data.result,
+        isSuccess: data.isSuccess,
       };
       console.log('Hotel:', this.hotel);
     } catch (error) {

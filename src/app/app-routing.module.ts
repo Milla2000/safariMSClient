@@ -6,12 +6,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { TourComponent } from './tour-card/tour-card.component';
 import { RoleGuard, AuthGuard } from './auth/role.guard';
 import { TourDetailComponent } from './tour-detail/tour-detail.component';
+import { HotelCardComponent } from './hotel-card/hotel-card.component';
 // import {  } from '@angular/router';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'tour/:id', component: TourDetailComponent },
+  { path: 'hotel/:id', component: HotelCardComponent },
   //  {
   //     path: 'dashboard',
   //     component: DashboardComponent,

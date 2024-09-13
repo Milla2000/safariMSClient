@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CloudinaryService } from '../services/cloudinary-signature.service';
 import { TourService } from '../services/tour.service';
 import { HotelService } from '../services/hotel.service';
@@ -33,6 +33,7 @@ export class TourDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private tourService: TourService,
     private hotelService: HotelService,
     private cloudinaryService: CloudinaryService
@@ -70,6 +71,11 @@ export class TourDetailComponent implements OnInit {
     } catch (error) {
       console.error('Error fetching hotels:', error);
     }
+  }
+
+  // Method to navigate to the hotel component with the hotel ID
+  navigateToHotel(hotelId: string): void {
+    this.router.navigate(['/hotel', hotelId]);
   }
 
   // Open the modal
