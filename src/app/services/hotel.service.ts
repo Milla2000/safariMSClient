@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class HotelService {
-  private apiUrl = 'http://localhost:5079/api/Hotels'; // Adjust the base URL as needed
+  private apiUrl = 'https://localhost:7000/api/Hotels'; // Adjust the base URL as needed
 
   constructor(private http: HttpClient) {}
 
@@ -18,10 +18,8 @@ export class HotelService {
   }
 
   // Get hotels by tour ID
-  getHotelsByTourId(tourId: string): Observable<IHotelResponseDto[]> {
-    return this.http
-      .get<any>(`${this.apiUrl}/${tourId}`)
-      .pipe(map((response) => response.result as IHotelResponseDto[]));
+  getHotelsByTourId(tourId: string): Observable<IHotelResponseDto> {
+    return this.http.get<IHotelResponseDto>(`${this.apiUrl}/${tourId}`);
   }
 
   // Get a single hotel by its ID

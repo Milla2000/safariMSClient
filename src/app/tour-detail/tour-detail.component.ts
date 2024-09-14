@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CloudinaryService } from '../services/cloudinary-signature.service';
 import { TourService } from '../services/tour.service';
 import { HotelService } from '../services/hotel.service';
-import { IHotelResponseDto, IAddHotelDto } from '../models/hotel.model';
+import { IHotelResponseDto, IAddHotelDto,IHotel } from '../models/hotel.model';
 import {
   IToursandImagesResponseDto,
   ITourImageDto,
@@ -17,7 +17,8 @@ import { firstValueFrom } from 'rxjs';
 })
 export class TourDetailComponent implements OnInit {
   tour: IToursandImagesResponseDto | null = null;
-  hotels: IHotelResponseDto[] = [];
+  hotels: IHotel[] = []; // This is an array of hotels
+  fullHotelResponse: IHotelResponseDto | null = null;
   tourId: string | null = null;
   isAddImageModalOpen: boolean = false;
   isAddHotelModalOpen: boolean = false;
@@ -66,7 +67,17 @@ export class TourDetailComponent implements OnInit {
       const hotelData = await firstValueFrom(
         this.hotelService.getHotelsByTourId(tourId)
       );
-      this.hotels = hotelData; // Assign the fetched hotels to the component's hotels array
+
+      // Store the full response
+      this.fullHotelResponse = hotelData;
+
+      // If successful, assign the hotels array from result
+      if (hotelData.isSuccess) {
+        this.hotels = hotelData.result;
+      } else {
+        console.error('Error:', hotelData.errormessage);
+      }
+
       console.log('Hotels:', this.hotels);
     } catch (error) {
       console.error('Error fetching hotels:', error);

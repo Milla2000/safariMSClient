@@ -21,7 +21,7 @@ export interface IHotel {
 
 export interface IHotelResponseDto {
   errormessage: string;
-  result: IHotel;
+  result: IHotel[];
   isSuccess: boolean;
   rating?: number;
   reviews?: number;

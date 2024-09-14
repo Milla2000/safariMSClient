@@ -9,7 +9,7 @@ import { IAddTourDto, ITourImageDto } from '../models/tour.model'; // Adjust the
   providedIn: 'root',
 })
 export class TourService {
-  private apiUrl = 'http://localhost:5079/api/Tour';
+  private apiUrl = 'https://localhost:7032/api/Tour';
 
   constructor(private http: HttpClient) {}
 
@@ -29,7 +29,7 @@ export class TourService {
     // Convert image URLs to AddTourImageDto
     const payload = imageUrls.map((imageUrl) => ({ image: imageUrl }));
     return this.http.post(
-      `http://localhost:5079/api/Images/${tourId}`,
+      `https://localhost:7032/api/Images/${tourId}`,
       payload
     );
   }
