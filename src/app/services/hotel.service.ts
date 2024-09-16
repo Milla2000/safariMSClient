@@ -24,8 +24,6 @@ export class HotelService {
 
   // Get a single hotel by its ID
   getHotelById(id: string): Observable<IHotelResponseDto> {
-    return this.http
-      .get<any>(`${this.apiUrl}/single/${id}`)
-      .pipe(map((response) => response.result as IHotelResponseDto));
+    return this.http.get<IHotelResponseDto>(`${this.apiUrl}/single/${id}`)
   }
 }

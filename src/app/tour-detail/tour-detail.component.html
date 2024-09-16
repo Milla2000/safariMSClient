@@ -8,16 +8,10 @@
     <p><strong>End Date:</strong> {{ tour.endDate | date }}</p>
     <p><strong>Price:</strong> {{ tour.price | currency:'Ksh' }}</p>
     <button class="explore-btn">Book Now</button>
-    <!-- New button to open modal -->
-    <button (click)="openAddImageModal()">Add Image</button>
-    <!-- Button to open Add Hotel Modal -->
-    <button (click)="openAddHotelModal()">Add Hotel</button>
-    <!-- Button to navigate to the hotel component -->
-    
-</div>
 
-<div *ngIf="!tour" class="loading">
-    <p>Loading tour details...</p>
+    <!-- Buttons to open the modal -->
+    <button (click)="openModal('image')">Add Image</button>
+    <button (click)="openModal('hotel')">Add Hotel</button>
 </div>
 
 
@@ -28,7 +22,7 @@
         <h4>{{ hotel.name }}</h4>
         <p><strong>Adult Price:</strong> {{ hotel.adultPrice | currency:'Ksh' }}</p>
         <p><strong>Kids Price:</strong> {{ hotel.kidsPrice | currency:'Ksh' }}</p>
-      
+
         <p><strong>Address:</strong> 123 Example Street, Nairobi</p>
         <p><strong>Rating:</strong> 4.5 / 5</p>
         <button (click)="navigateToHotel(hotel.id)">View Hotel</button>
@@ -37,18 +31,47 @@
 
 
 
-<!-- Modal for adding images -->
-<div class="modal" *ngIf="isAddImageModalOpen">
+
+
+<!-- Modal Structure -->
+<div *ngIf="isModalOpen" class="modal-overlay">
     <div class="modal-content">
-        <span class="close" (click)="closeAddImageModal()">&times;</span>
-        <h2>Add Images</h2>
+        <span class="close" (click)="closeModal()">&times;</span>
 
-        <form (ngSubmit)="submitImages()">
-            <label for="imageFiles">Select Images:</label>
-            <input type="file" id="imageFiles" (change)="onFilesSelected($event)" multiple />
+        <!-- Conditional content based on modalType -->
+        <div *ngIf="modalType === 'image'">
+            <h2>Add Images</h2>
+            <form (ngSubmit)="submitImages()">
+                <label for="imageFiles">Select Images:</label>
+                <input type="file" id="imageFiles" (change)="onFilesSelected($event)" multiple />
+                <button type="submit">Add Images</button>
+            </form>
+        </div>
 
-            <button type="submit">Add Images</button>
-        </form>
+        <div *ngIf="modalType === 'hotel'">
+            <h3>Add New Hotel</h3>
+            <form (ngSubmit)="addHotel()">
+                <div class="form-group">
+                    <label for="hotelName">Hotel Name:</label>
+                    <input id="hotelName" [(ngModel)]="newHotel.name" name="hotelName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="adultPrice">Adult Price:</label>
+                    <input id="adultPrice" type="number" [(ngModel)]="newHotel.adultPrice" name="adultPrice" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="kidsPrice">Kids Price:</label>
+                    <input id="kidsPrice" type="number" [(ngModel)]="newHotel.kidsPrice" name="kidsPrice" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -56,30 +79,4 @@
 
 
 
-<!-- Add Hotel Modal -->
-<div *ngIf="isAddHotelModalOpen" class="modal-overlay">
-    <div class="modal-content">
-        <h3>Add New Hotel</h3>
-        <form (ngSubmit)="addHotel()">
-            <div class="form-group">
-                <label for="hotelName">Hotel Name:</label>
-                <input id="hotelName" [(ngModel)]="newHotel.name" name="hotelName" required>
-            </div>
 
-            <div class="form-group">
-                <label for="adultPrice">Adult Price:</label>
-                <input id="adultPrice" type="number" [(ngModel)]="newHotel.adultPrice" name="adultPrice" required>
-            </div>
-
-            <div class="form-group">
-                <label for="kidsPrice">Kids Price:</label>
-                <input id="kidsPrice" type="number" [(ngModel)]="newHotel.kidsPrice" name="kidsPrice" required>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" (click)="closeAddHotelModal()">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>

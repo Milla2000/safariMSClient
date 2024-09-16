@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CloudinaryService } from '../services/cloudinary-signature.service';
 import { TourService } from '../services/tour.service';
 import { HotelService } from '../services/hotel.service';
-import { IHotelResponseDto, IAddHotelDto,IHotel } from '../models/hotel.model';
+import { IHotelResponseDto, IAddHotelDto, IHotel } from '../models/hotel.model';
 import {
   IToursandImagesResponseDto,
   ITourImageDto,
@@ -17,11 +17,14 @@ import { firstValueFrom } from 'rxjs';
 })
 export class TourDetailComponent implements OnInit {
   tour: IToursandImagesResponseDto | null = null;
-  hotels: IHotel[] = []; // This is an array of hotels
+  hotels: IHotel[] = [];
   fullHotelResponse: IHotelResponseDto | null = null;
   tourId: string | null = null;
-  isAddImageModalOpen: boolean = false;
-  isAddHotelModalOpen: boolean = false;
+  // isAddImageModalOpen: boolean = false;
+  // isAddHotelModalOpen: boolean = false;
+  isModalOpen: boolean = false;
+  modalType: 'image' | 'hotel' | null = null;
+
   selectedFiles: File[] = []; // Store multiple files
 
   // Variables for new hotel addition
@@ -85,35 +88,31 @@ export class TourDetailComponent implements OnInit {
   }
 
   // Method to navigate to the hotel component with the hotel ID
-  navigateToHotel(hotelId: string): void {
-    this.router.navigate(['/hotel', hotelId]);
+  navigateToHotel(hotelId: string | null): void {
+    if (hotelId) {
+      this.router.navigate(['/hotel', hotelId]);
+    } else {
+      console.error('Invalid hotelId:', hotelId);
+    }
   }
 
-  // Open the modal
-  openAddImageModal(): void {
-    this.isAddImageModalOpen = true;
+  // Generic method to open the modal
+  openModal(type: 'image' | 'hotel'): void {
+    this.modalType = type;
+    this.isModalOpen = true;
   }
 
-  // Close the modal
-  closeAddImageModal(): void {
-    this.isAddImageModalOpen = false;
-    this.selectedFiles = []; // Reset file selection
-  }
-
-  // Open the Add Hotel Modal
-  openAddHotelModal(): void {
-    this.isAddHotelModalOpen = true;
-  }
-
-  // Close the Add Hotel Modal
-  closeAddHotelModal(): void {
-    this.isAddHotelModalOpen = false;
+  // Generic method to close the modal
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.modalType = null;
+    this.selectedFiles = [];
     this.newHotel = {
       name: '',
       tourId: this.tourId!,
       adultPrice: 0,
       kidsPrice: 0,
-    }; // Reset the form
+    }; // Reset hotel form
   }
 
   // Add new hotel to the tour
@@ -131,7 +130,7 @@ export class TourDetailComponent implements OnInit {
 
         // Update the list of hotels after adding the new one
         await this.getHotels(this.tourId!);
-        this.closeAddHotelModal(); // Close the modal after successful addition
+        this.closeModal();
       } catch (error) {
         console.error('Error adding hotel:', error);
       }
@@ -185,7 +184,7 @@ export class TourDetailComponent implements OnInit {
         await this.getTour(this.tourId);
 
         // Close the modal after successful submission
-        this.closeAddImageModal();
+        this.closeModal();
         console.log('Images added:', result);
       } catch (error) {
         console.error(
