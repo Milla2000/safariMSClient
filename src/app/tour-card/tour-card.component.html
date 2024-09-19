@@ -2,35 +2,64 @@
 
 <div *ngIf="showForm" class="add-tour-form">
     <h2>Add a New Tour</h2>
-    <form (ngSubmit)="onSubmit()" #tourForm="ngForm" enctype="multipart/form-data">
+    <form (ngSubmit)="onSubmit()" #tourForm="ngForm" enctype="multipart/form-data" novalidate>
         <div class="form-group">
             <label for="safariName">Safari Name</label>
-            <input type="text" id="safariName" [(ngModel)]="newTour.safariName" name="safariName" required>
+            <input type="text" id="safariName" [(ngModel)]="newTour.safariName" name="safariName" required
+                #safariName="ngModel">
+            <div *ngIf="safariName.invalid && safariName.touched" class="error">
+               <small style="color: #ff4081;">Safari Name is required.</small> 
+            </div>
         </div>
+
         <div class="form-group">
             <label for="safariDescription">Safari Description</label>
-            <textarea id="safariDescription" [(ngModel)]="newTour.safariDescription" name="safariDescription"
-                required></textarea>
+            <textarea id="safariDescription" [(ngModel)]="newTour.safariDescription" name="safariDescription" required
+                #safariDescription="ngModel"></textarea>
+            <div *ngIf="safariDescription.invalid && safariDescription.touched" class="error">
+               <small style="color: #ff4081;">Safari Description is required.</small> 
+            </div>
         </div>
+
         <div class="form-group">
             <label for="startDate">Start Date</label>
-            <input type="date" id="startDate" [(ngModel)]="newTour.startDate" name="startDate" required>
+            <input type="date" id="startDate" [(ngModel)]="newTour.startDate" name="startDate" required #startDate="ngModel"
+                [min]="minDate" >
+            <div *ngIf="startDate.invalid && startDate.touched" class="error">
+               <small style="color: #ff4081;">Start Date is required and cannot be in the past.</small> 
+            </div>
         </div>
+
         <div class="form-group">
             <label for="endDate">End Date</label>
-            <input type="date" id="endDate" [(ngModel)]="newTour.endDate" name="endDate" required>
+            <input type="date" id="endDate" [(ngModel)]="newTour.endDate" name="endDate" required #endDate="ngModel"
+                [disabled]="!newTour.startDate" [min]="newTour.startDate | date:'yyyy-MM-dd'">
+            <div *ngIf="endDate.invalid && endDate.touched" class="error">
+               <small style="color: #ff4081;">End Date is required and must be after the Start Date.</small> 
+            </div>
         </div>
+
         <div class="form-group">
             <label for="price">Price</label>
-            <input type="number" id="price" [(ngModel)]="newTour.price" name="price" required>
+            <input type="number" id="price" [(ngModel)]="newTour.price" (ngModelChange)="validatePrice()"  name="price" required #price="ngModel" min="1" step="1">
+            <div *ngIf="price.invalid && price.touched" class="error">
+              <small style="color: #ff4081;">Price is required and must be greater than 0 and be a number.</small> 
+            </div>
         </div>
+
         <div class="form-group">
             <label for="image">Upload Images</label>
             <input type="file" id="image" (change)="onFileSelected($event)" multiple required>
+            <div *ngIf="selectedFiles.length === 0" class="error">
+                <small style="color: #ff4081;">Please select at least one image.</small>
+            </div>
         </div>
-        <button type="submit" class="explore-btn">Add Tour</button>
+
+        <button type="submit" class="explore-btn" [disabled]="tourForm.invalid">Add Tour</button>
     </form>
 </div>
+
+
 <div class="content-tours">
     <div *ngFor="let tour of tours" class="card">
         <div class="card-image">

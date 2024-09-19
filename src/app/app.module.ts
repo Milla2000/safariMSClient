@@ -29,7 +29,6 @@ import { HotelCardComponent } from './hotel-card/hotel-card.component';
     TourComponent,
     TourDetailComponent,
     HotelCardComponent,
-    
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [

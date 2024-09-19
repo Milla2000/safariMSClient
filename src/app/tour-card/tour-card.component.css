@@ -43,11 +43,12 @@
   border-radius: 4px;
 }
 
+/* Enabled state */
 .explore-btn {
   width: 30%;
   margin: 5px;
   padding: 10px 15px;
-  background-color: #cf4472;
+  background-color: #cf4472; /* Bright pink when enabled */
   color: white;
   border: none;
   border-radius: 5px;
@@ -59,14 +60,28 @@
 }
 
 .explore-btn:hover {
-  background-color: #b53d65;
-  transform: translateY(-3px);
+  background-color: #b53d65; /* Darker pink when hovered */
+  transform: translateY(-3px); /* Lifts button slightly on hover */
 }
 
 .explore-btn:active {
-  background-color: #9e3659;
-  transform: translateY(0);
+  background-color: #9e3659; /* Even darker when clicked */
+  transform: translateY(0); /* Resets button position */
 }
+
+/* Disabled state */
+.explore-btn:disabled {
+  background-color: #ddd; /* Light gray for disabled state */
+  color: #999; /* Light gray text */
+  cursor: not-allowed; /* Show not-allowed cursor when button is disabled */
+  transform: none; /* No transformation on disabled buttons */
+}
+
+.explore-btn:disabled:hover {
+  background-color: #ddd; /* Prevent hover effect on disabled button */
+  transform: none; /* Prevent transform on hover */
+}
+
 
 .content-tours {
   display: flex;

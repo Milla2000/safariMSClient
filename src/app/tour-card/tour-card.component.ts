@@ -21,6 +21,9 @@ export class TourComponent implements OnInit {
     safariImages: [],
   };
   selectedFiles: File[] = []; // Holds the selected files
+  minDate!: string;
+  priceError: boolean = false;
+  isStartDateSelected: boolean = false;
 
   constructor(
     private tourService: TourService,
@@ -28,7 +31,14 @@ export class TourComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const today = new Date();
+    // Format the date to 'YYYY-MM-DD' format required by the date input
+    this.minDate = today.toISOString().split('T')[0];
     this.getTours();
+  }
+
+  private isDateRangeValid(startDate: Date, endDate: Date): boolean {
+      return startDate <= endDate;
   }
 
   async getTours(): Promise<void> {
@@ -51,6 +61,11 @@ export class TourComponent implements OnInit {
     this.showForm = !this.showForm;
   }
 
+  validatePrice() {
+    const isInteger = Number.isInteger(+this.newTour.price);
+    this.priceError = !isInteger;
+  }
+
   onFileSelected(event: Event): void {
     // Cast event.target to HTMLInputElement
     const input = event.target as HTMLInputElement;
@@ -60,6 +75,12 @@ export class TourComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    // Check if end date is greater than start date
+    if (!this.isDateRangeValid(this.newTour.startDate, this.newTour.endDate)) {
+      alert('End date must be greater than start date.');
+      return;
+    }
+
     if (this.selectedFiles.length === 0) {
       alert('Please select at least one image file.');
       return;
