@@ -1,7 +1,7 @@
-export interface IStripeRequestDto{
-    StripeSessionUrl: string;
-    StripeSessionId: string;
-    ApprovedUrl: string;
-    CanceledUrl: string;
-    BookingId: string;
+export interface IStripeRequestDto {
+  stripeSessionUrl: string;
+  stripeSessionId: string;
+  approvedUrl: string;
+  canceledUrl: string;
+  bookingId: string;
 }

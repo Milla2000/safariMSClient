@@ -1,8 +1,8 @@
 export interface IBookingDto {
-    UserId: string;
-    BookingTotal: number;
-    Adults: number;
-    Kids: number;
-    tourId: string;
-    hotelId: string;
+  userId: string;
+  bookingTotal: number;
+  adults: number;
+  kids: number;
+  tourId: string;
+  hotelId: string;
 }
