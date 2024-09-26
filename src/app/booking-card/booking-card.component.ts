@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { BookingService } from '../services/booking.service';
 import { HotelService } from '../services/hotel.service';
@@ -12,23 +12,37 @@ import { IHotel } from '../models/hotel.model';
   styleUrls: ['./booking-card.component.css'],
 })
 export class BookingCardComponent implements OnInit {
-  userId = localStorage.getItem('userId'); // Retrieve user ID
-  tourId: string | null = null; // Store tour ID from route
-  hotels: IHotel[] = []; // Store hotels from API
-  selectedHotelId: string | null = null; // Store selected hotel ID
-  adults: number = 0; // Number of adults
-  kids: number = 0; // Number of kids
-  bookingTotal: number = 0; // Total booking amount
-  bookingId: string | null = null; // Store booking ID after submission
+  userId!: string;
+  tourId: string | null = null; 
+  hotels: IHotel[] = [];
+  selectedHotelId: string | null = null; 
+  adults: number = 0; 
+  kids: number = 0; 
+  bookingTotal: number = 0; 
+  bookingId: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private bookingService: BookingService,
-    private hotelService: HotelService
+    private hotelService: HotelService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.initializeTourId();
+    // Retrieve user JSON string from localStorage
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      const user = JSON.parse(userString);
+      this.userId = user.id;
+      console.log('User ID:', this.userId);
+    } else {
+      alert('Kindly login to place a booking');
+      // Redirect to login page and pass the current URL to return after login
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url },
+      });
+    }
   }
 
   private initializeTourId(): void {
@@ -42,13 +56,14 @@ export class BookingCardComponent implements OnInit {
 
   private async fetchHotels(): Promise<void> {
     if (!this.tourId) return;
-
+    console.log('my Tour ID:', this.tourId);
     try {
       const response = await firstValueFrom(
         this.hotelService.getHotelsByTourId(this.tourId)
       );
       if (response.isSuccess) {
         this.hotels = response.result;
+        console.log('Hotels:', this.hotels);
       } else {
         console.error('Error fetching hotels:', response.errormessage);
       }
@@ -64,15 +79,16 @@ export class BookingCardComponent implements OnInit {
     }
 
     const bookingData: IBookingDto = {
-      userId: this.userId!,
+      userId: this.userId,
       adults: this.adults,
       kids: this.kids,
       tourId: this.tourId!,
       hotelId: this.selectedHotelId!,
-      bookingTotal: 0, 
+      bookingTotal: 0,
     };
 
     try {
+      console.log('Booking data:', bookingData);
       const response = await firstValueFrom(
         this.bookingService.addBooking(bookingData)
       );

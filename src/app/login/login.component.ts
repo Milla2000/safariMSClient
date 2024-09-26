@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ILoginRequestDto, IResponseDto} from '../models/user.model';
 
@@ -15,8 +16,8 @@ export class LoginComponent {
   userId: string = '';
   userData: any;
 
-  constructor(private authService: AuthService) {}
-  
+  constructor(private authService: AuthService, private router: Router) {}
+
   ngOnInit(): void {
     // Call getUserData when component initializes
     this.getUserData();
@@ -34,6 +35,9 @@ export class LoginComponent {
           localStorage.setItem('token', response.result.token);
           localStorage.setItem('user', JSON.stringify(response.result.user));
           localStorage.setItem('role', response.result.role);
+
+          const returnUrl = this.router.snapshot.queryParams['returnUrl'] || '/'; // Default to home
+          this.router.navigateByUrl(returnUrl);
         } else {
           console.error('Login failed:', response.errormessage);
         }

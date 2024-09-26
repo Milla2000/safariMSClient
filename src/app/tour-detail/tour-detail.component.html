@@ -7,7 +7,7 @@
     <p><strong>Start Date:</strong> {{ tour.startDate | date }}</p>
     <p><strong>End Date:</strong> {{ tour.endDate | date }}</p>
     <p><strong>Price:</strong> {{ tour.price | currency:'Ksh' }}</p>
-    <button class="explore-btn">Book Now</button>
+    <button class="explore-btn" [routerLink]="['/bookingatour', tour.id]">Book Now</button>
 
     <!-- Buttons to open the modal -->
     <button (click)="openModal('image')">Add Image</button>

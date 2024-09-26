@@ -7,7 +7,7 @@ import { TourComponent } from './tour-card/tour-card.component';
 import { RoleGuard, AuthGuard } from './auth/role.guard';
 import { TourDetailComponent } from './tour-detail/tour-detail.component';
 import { HotelCardComponent } from './hotel-card/hotel-card.component';
-// import { BookingModalComponent } from './booking-card/booking-card.component';
+import { BookingCardComponent } from './booking-card/booking-card.component';
 // import {  } from '@angular/router';
 
 const routes: Routes = [
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'tour/:id', component: TourDetailComponent },
   { path: 'hotel/:id', component: HotelCardComponent },
-  // {path: 'bookings', component : BookingModalComponent},
+  {path: 'bookingatour/:id', component : BookingCardComponent},
   //  {
   //     path: 'dashboard',
   //     component: DashboardComponent,

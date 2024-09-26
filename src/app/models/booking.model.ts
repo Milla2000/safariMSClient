@@ -1,5 +1,5 @@
 export interface IBookingDto {
-  userId: string;
+  userId?: string;
   bookingTotal: number;
   adults: number;
   kids: number;
