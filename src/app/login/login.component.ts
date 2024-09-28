@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { ILoginRequestDto, IResponseDto} from '../models/user.model';
+import { ILoginRequestDto, IResponseDto } from '../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,11 @@ export class LoginComponent {
   userId: string = '';
   userData: any;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     // Call getUserData when component initializes
@@ -27,16 +31,17 @@ export class LoginComponent {
     this.authService
       .loginUser(this.loginDto)
       .subscribe((response: IResponseDto) => {
-        // Handle response
         if (response.isSuccess) {
           // Login success
           console.log('User logged in successfully', response);
-          // Save token and user to local storage
           localStorage.setItem('token', response.result.token);
           localStorage.setItem('user', JSON.stringify(response.result.user));
           localStorage.setItem('role', response.result.role);
 
-          const returnUrl = this.router.snapshot.queryParams['returnUrl'] || '/'; // Default to home
+          // Use this.route.snapshot instead of this.router.snapshot
+          const returnUrl =
+            this.route.snapshot.queryParams['returnUrl'] || '/tour';
+              // this.route.routerState.queryParams['returnUrl'] || '/tour';
           this.router.navigateByUrl(returnUrl);
         } else {
           console.error('Login failed:', response.errormessage);

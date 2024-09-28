@@ -38,6 +38,8 @@
         <p>Booking Successful!</p>
         <p>Total Price: ${{ bookingTotal }}</p>
         <p>Booking ID: {{ bookingId }}</p>
+        <!-- Payment Button -->
+        <button class="btn btn-success" (click)="makePayment()">Make Payment</button>
     </div>
 
     <!-- Error Message (if no hotel selected) -->

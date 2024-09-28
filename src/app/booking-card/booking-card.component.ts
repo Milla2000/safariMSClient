@@ -5,6 +5,7 @@ import { BookingService } from '../services/booking.service';
 import { HotelService } from '../services/hotel.service';
 import { IBookingDto } from '../models/booking.model';
 import { IHotel } from '../models/hotel.model';
+import { IStripeRequestDto } from '../models/stripe.model';
 
 @Component({
   selector: 'app-booking-card',
@@ -13,12 +14,12 @@ import { IHotel } from '../models/hotel.model';
 })
 export class BookingCardComponent implements OnInit {
   userId!: string;
-  tourId: string | null = null; 
+  tourId: string | null = null;
   hotels: IHotel[] = [];
-  selectedHotelId: string | null = null; 
-  adults: number = 0; 
-  kids: number = 0; 
-  bookingTotal: number = 0; 
+  selectedHotelId: string | null = null;
+  adults: number = 0;
+  kids: number = 0;
+  bookingTotal: number = 0;
   bookingId: string | null = null;
 
   constructor(
@@ -102,5 +103,30 @@ export class BookingCardComponent implements OnInit {
     this.bookingTotal = response.result.bookingTotalPrice;
     this.bookingId = response.result.bookingId;
     console.log('Booking successful:', response);
+  }
+
+  // Add this method to handle payments
+  async makePayment(): Promise<void> {
+    if (!this.bookingId) {
+      console.error('Booking ID is missing');
+      return;
+    }
+
+    const paymentData: IStripeRequestDto = {
+      bookingId: this.bookingId,
+      approvedUrl: 'https://your-frontend-app.com/payment-success',
+      cancelUrl: 'https://your-frontend-app.com/payment-cancel',
+      stripeSessionUrl: '', 
+      stripeSessionId: '',
+    };
+
+    try {
+      const response = await firstValueFrom(
+        this.bookingService.makePayment(paymentData)
+      );
+      window.location.href = response.result.stripeSessionUrl;
+    } catch (error) {
+      console.error('Payment failed:', error);
+    }
   }
 }
