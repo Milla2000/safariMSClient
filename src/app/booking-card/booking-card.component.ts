@@ -116,7 +116,7 @@ export class BookingCardComponent implements OnInit {
       bookingId: this.bookingId,
       approvedUrl: 'https://your-frontend-app.com/payment-success',
       cancelUrl: 'https://your-frontend-app.com/payment-cancel',
-      stripeSessionUrl: '', 
+      stripeSessionUrl: '',
       stripeSessionId: '',
     };
 
@@ -124,7 +124,20 @@ export class BookingCardComponent implements OnInit {
       const response = await firstValueFrom(
         this.bookingService.makePayment(paymentData)
       );
-      window.location.href = response.result.stripeSessionUrl;
+
+      if (response.isSuccess) {
+        // Access stripeSessionUrl from result, assuming it is there
+        const result: any = response.result; // Cast result as 'any' to avoid TypeScript checking
+
+        if (result.stripeSessionUrl) {
+          window.location.href = result.stripeSessionUrl;
+          console.log('Redirecting to Stripe:', response);
+        } else {
+          console.error('stripeSessionUrl is missing in response:', result);
+        }
+      } else {
+        console.error('Payment failed:', response.errormessage);
+      }
     } catch (error) {
       console.error('Payment failed:', error);
     }
