@@ -114,11 +114,11 @@ export class BookingCardComponent implements OnInit {
 
     const paymentData: IStripeRequestDto = {
       bookingId: this.bookingId,
-      approvedUrl: 'https://your-frontend-app.com/payment-success',
+      approvedUrl: `https://${this.bookingId}/payment-success`,
       cancelUrl: 'https://your-frontend-app.com/payment-cancel',
       stripeSessionUrl: '',
       stripeSessionId: '',
-    };
+    }; 
 
     try {
       const response = await firstValueFrom(

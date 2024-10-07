@@ -16,6 +16,7 @@ import { AuthService } from './services//auth.service';
 import { TourDetailComponent } from './tour-detail/tour-detail.component';
 import { HotelCardComponent } from './hotel-card/hotel-card.component';
 import { BookingCardComponent } from './booking-card/booking-card.component';
+import { ValidatePaymentComponent } from './validate-payment/validate-payment.component';
 
 
 
@@ -31,6 +32,7 @@ import { BookingCardComponent } from './booking-card/booking-card.component';
     TourDetailComponent,
     HotelCardComponent,
     BookingCardComponent,
+    ValidatePaymentComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [
