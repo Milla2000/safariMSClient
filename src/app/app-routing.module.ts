@@ -8,6 +8,7 @@ import { RoleGuard, AuthGuard } from './auth/role.guard';
 import { TourDetailComponent } from './tour-detail/tour-detail.component';
 import { HotelCardComponent } from './hotel-card/hotel-card.component';
 import { BookingCardComponent } from './booking-card/booking-card.component';
+import { ValidatePaymentComponent } from './validate-payment/validate-payment.component';
 // import {  } from '@angular/router';
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'tour/:id', component: TourDetailComponent },
   { path: 'hotel/:id', component: HotelCardComponent },
   {path: 'bookingatour/:id', component : BookingCardComponent},
+  {path: 'validatepayment/:id', component : ValidatePaymentComponent},
   //  {
   //     path: 'dashboard',
   //     component: DashboardComponent,

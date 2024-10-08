@@ -1,7 +1,28 @@
-<div class="validate-payment">
-    <h1>Validate Payment</h1>
-    <p *ngIf="!bookingId">Booking ID is missing. Please check your URL.</p>
-    <p *ngIf="bookingId">Validating payment for booking ID: {{ bookingId }}...</p>
-    <p *ngIf="isSuccess">Payment validation successful!</p>
-    <p *ngIf="errorMessage">{{ errorMessage }}</p>
+<div class="payment-container">
+    <!-- Only show the congratulations if the payment is successful -->
+    <div *ngIf="isSuccess; else errorContent" class="congrats-container">
+        <div class="animation-box">
+            <!-- Example: Simple Lottie animation or confetti animation -->
+            <img src="assets/animations/congrats-animation.gif" alt="Congratulations" class="congrats-animation" />
+        </div>
+        <h1 class="congrats-message">Congratulations! 🎉</h1>
+        <p class="congrats-text">
+            Your payment was successful. Thank you for booking with us!
+        </p>
+        <button class="btn btn-primary" (click)="goToDashboard()">
+            Go to Dashboard
+        </button>
+    </div>
+
+    <!-- Error content for failed payment validation -->
+    <ng-template #errorContent>
+        <div class="error-container">
+            <h1 class="error-message">Payment Validation Failed 😞</h1>
+            <p class="error-text">{{ errorMessage || 'An error occurred during payment validation. Please try again.' }}
+            </p>
+            <button class="btn btn-danger" (click)="retryPayment()">
+                Retry Payment
+            </button>
+        </div>
+    </ng-template>
 </div>

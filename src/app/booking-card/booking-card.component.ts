@@ -114,7 +114,7 @@ export class BookingCardComponent implements OnInit {
 
     const paymentData: IStripeRequestDto = {
       bookingId: this.bookingId,
-      approvedUrl: `https://${this.bookingId}/payment-success`,
+      approvedUrl: `http://localhost:4200/validatepayment/${this.bookingId}`,
       cancelUrl: 'https://your-frontend-app.com/payment-cancel',
       stripeSessionUrl: '',
       stripeSessionId: '',

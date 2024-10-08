@@ -13,15 +13,15 @@ export class ValidatePaymentComponent implements OnInit {
   errorMessage: string | null = null; // Variable to store error message
 
   constructor(
-    private bookingService: BookingService,
-    private route: ActivatedRoute
+    private readonly bookingService: BookingService,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     // Retrieve bookingId from route parameters
     this.route.params.subscribe((params) => {
-      this.bookingId = params['id']; // Retrieve bookingId from the URL parameter
-      this.validatePayment(); // Call validatePayment once bookingId is available
+      this.bookingId = params['id']; 
+      this.validatePayment(); 
     });
   }
 
@@ -33,17 +33,22 @@ export class ValidatePaymentComponent implements OnInit {
     }
 
     try {
-      const response = await this.bookingService.validatePayment(
-        this.bookingId
-      );
-      if (response.isSuccess) {
+      this.bookingService.validatePayment(this.bookingId).subscribe(
+        (response) => {
+          if (response.isSuccess) {
         console.log('Payment validation successful:', response.result);
         this.isSuccess = true; 
-      } else {
-        console.error('Payment validation failed:', response.errorMessage);
-        this.errorMessage =
-          response.errorMessage || 'Payment validation failed.';
-      }
+          } else {
+            console.error('Payment validation failed:', response.errormessage);
+            this.errorMessage =
+              response.errormessage || 'Payment validation failed.';
+          }
+        },
+        (error) => {
+          console.error('Error during payment validation:', error);
+          this.errorMessage = 'An error occurred during payment validation.';
+        }
+      );
     } catch (error) {
       console.error('Error during payment validation:', error);
       this.errorMessage = 'An error occurred during payment validation.';
