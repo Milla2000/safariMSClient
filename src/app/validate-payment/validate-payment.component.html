@@ -1,1 +1,7 @@
-<p>validate-payment works!</p>
+<div class="validate-payment">
+    <h1>Validate Payment</h1>
+    <p *ngIf="!bookingId">Booking ID is missing. Please check your URL.</p>
+    <p *ngIf="bookingId">Validating payment for booking ID: {{ bookingId }}...</p>
+    <p *ngIf="isSuccess">Payment validation successful!</p>
+    <p *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>
