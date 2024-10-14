@@ -16,8 +16,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'tour/:id', component: TourDetailComponent },
   { path: 'hotel/:id', component: HotelCardComponent },
-  {path: 'bookingatour/:id', component : BookingCardComponent},
-  {path: 'validatepayment/:id', component : ValidatePaymentComponent},
+  { path: 'bookingatour/:id', component: BookingCardComponent },
+  { path: 'validatepayment/:id', component: ValidatePaymentComponent },
   //  {
   //     path: 'dashboard',
   //     component: DashboardComponent,
@@ -26,9 +26,7 @@ const routes: Routes = [
 
   // { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  {
-    path: 'tour',
-    component: TourComponent,
+  { path: 'tour', component: TourComponent,
     canActivate: [
       AuthGuard,
       (route: ActivatedRouteSnapshot) => RoleGuard(route),

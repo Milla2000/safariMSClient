@@ -43,7 +43,15 @@ export class BookingCardComponent implements OnInit {
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: this.router.url },
       });
+      return;
     }
+     this.route.queryParams.subscribe((params) => {
+       const bookingId = params['bookingId'];
+       if (bookingId) {
+         this.bookingId = bookingId;
+         this.makePayment();
+       }
+     });
   }
 
   private initializeTourId(): void {
