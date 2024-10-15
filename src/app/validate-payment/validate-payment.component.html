@@ -1,6 +1,13 @@
 <div class="payment-container">
+
+    <div *ngIf="isLoading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Validating your payment...</p>
+    </div>
+
+
     <!-- Only show the congratulations if the payment is successful -->
-    <div *ngIf="isSuccess; else errorContent" class="congrats-container">
+    <div *ngIf="!isLoading && isSuccess; else errorContent" class="congrats-container">
         <div class="animation-box">
             <!-- Example: Simple Lottie animation or confetti animation -->
             <img src="assets/animations/congrats-animation.gif" alt="Congratulations" class="congrats-animation" />
@@ -16,7 +23,7 @@
 
     <!-- Error content for failed payment validation -->
     <ng-template #errorContent>
-        <div class="error-container">
+        <div *ngIf="!isLoading" class="error-container">
             <h1 class="error-message">Payment Validation Failed 😞</h1>
             <p class="error-text">{{ errorMessage || 'An error occurred during payment validation. Please try again.' }}
             </p>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingService } from '../services/booking.service'; // Adjust the path as necessary
 import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs/operators'; // RxJS finalize operator
 
 @Component({
   selector: 'app-validate-payment',
@@ -11,6 +12,7 @@ export class ValidatePaymentComponent implements OnInit {
   bookingId!: string; // Booking ID to validate payment
   isSuccess = false; // Flag to check payment validation success
   errorMessage: string | null = null; // Variable to store error message
+  isLoading = true; // Set loading to true initially
 
   constructor(
     private readonly bookingService: BookingService,
@@ -26,34 +28,52 @@ export class ValidatePaymentComponent implements OnInit {
     });
   }
 
-  async validatePayment(): Promise<void> {
+  validatePayment(): void {
     if (!this.bookingId) {
-      console.error('Booking ID is missing');
-      this.errorMessage = 'Booking ID is missing.';
+      this.handleFailure('Booking ID is missing.');
       return;
     }
 
-    try {
-      this.bookingService.validatePayment(this.bookingId).subscribe(
+    this.startLoading(); // Start the loading state
+
+    this.bookingService
+      .validatePayment(this.bookingId)
+      .pipe(finalize(() => this.stopLoading())) // Ensures `isLoading` is false regardless of success or error
+      .subscribe(
         (response) => {
           if (response.isSuccess) {
-            console.log('Payment validation successful:', response.result);
-            this.isSuccess = true;
+            this.handleSuccess(response.result);
           } else {
-            console.error('Payment validation failed:', response.errormessage);
-            this.errorMessage =
-              response.errormessage || 'Payment validation failed.';
+            this.handleFailure(
+              response.errormessage || 'Payment validation failed.'
+            );
           }
         },
-        (error) => {
-          console.error('Error during payment validation:', error);
-          this.errorMessage = 'An error occurred during payment validation.';
-        }
+        (error) =>
+          this.handleFailure('An error occurred during payment validation.')
       );
-    } catch (error) {
-      console.error('Error during payment validation:', error);
-      this.errorMessage = 'An error occurred during payment validation.';
-    }
+  }
+
+  private handleSuccess(result: any): void {
+    this.isSuccess = true; // Mark validation as successful
+    this.errorMessage = null; // Clear error message
+    console.log('Payment validation successful:', result);
+  }
+
+  private handleFailure(message: string): void {
+    this.isSuccess = false; // Mark validation as failed
+    this.errorMessage = message;
+    console.error('Payment validation failed:', message);
+  }
+
+  private startLoading(): void {
+    this.isLoading = true;
+    this.isSuccess = false;
+    this.errorMessage = null; // Reset states before loading
+  }
+
+  private stopLoading(): void {
+    this.isLoading = false; // Always stop loading at the end
   }
 
   goToTours(): void {

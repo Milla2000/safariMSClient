@@ -23,10 +23,10 @@ export class BookingCardComponent implements OnInit {
   bookingId: string | null = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private bookingService: BookingService,
-    private hotelService: HotelService,
-    private router: Router
+    private readonly route: ActivatedRoute,
+    private readonly bookingService: BookingService,
+    private readonly hotelService: HotelService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -45,13 +45,13 @@ export class BookingCardComponent implements OnInit {
       });
       return;
     }
-     this.route.queryParams.subscribe((params) => {
-       const bookingId = params['bookingId'];
-       if (bookingId) {
-         this.bookingId = bookingId;
-         this.makePayment();
-       }
-     });
+    this.route.queryParams.subscribe((params) => {
+      const bookingId = params['bookingId'];
+      if (bookingId) {
+        this.bookingId = bookingId;
+        this.makePayment();
+      }
+    });
   }
 
   private initializeTourId(): void {
@@ -126,7 +126,7 @@ export class BookingCardComponent implements OnInit {
       cancelUrl: 'https://your-frontend-app.com/payment-cancel',
       stripeSessionUrl: '',
       stripeSessionId: '',
-    }; 
+    };
 
     try {
       const response = await firstValueFrom(
