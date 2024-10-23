@@ -14,7 +14,7 @@ export const AuthGuard = () => {
     
   }
   console.error('Unauthorized', Error);
-  router.navigate(['/dashboard']);
+  router.navigate(['/login']);
   return false;
 };
 
