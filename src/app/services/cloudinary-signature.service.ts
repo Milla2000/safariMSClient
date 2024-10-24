@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CloudinaryService {
-  private cloudName = 'milla2000';
-  private uploadPreset = 'new_preset';
+  private readonly cloudName = 'milla2000';
+  private readonly uploadPreset = 'new_preset';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getSignature(): Observable<any> {
     return this.http.get('https://localhost:7269/api/Cloudinary/signature');

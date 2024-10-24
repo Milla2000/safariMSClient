@@ -8,9 +8,8 @@ import { IAddHotelDto, IHotelResponseDto } from '../models/hotel.model';
   providedIn: 'root',
 })
 export class HotelService {
-  private apiUrl = 'https://localhost:7000/api/Hotels'; // Adjust the base URL as needed
-
-  constructor(private http: HttpClient) {}
+  private readonly apiUrl = 'https://localhost:7000/api/Hotels'; 
+  constructor(private readonly http: HttpClient) {}
 
   // Add a new hotel
   addHotel(hotelData: IAddHotelDto): Observable<any> {
@@ -24,6 +23,6 @@ export class HotelService {
 
   // Get a single hotel by its ID
   getHotelById(id: string): Observable<IHotelResponseDto> {
-    return this.http.get<IHotelResponseDto>(`${this.apiUrl}/single/${id}`)
+    return this.http.get<IHotelResponseDto>(`${this.apiUrl}/single/${id}`);
   }
 }

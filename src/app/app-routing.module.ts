@@ -19,33 +19,23 @@ const routes: Routes = [
   {
     path: 'bookingatour/:id',
     component: BookingCardComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: 'validatepayment/:id',
     component: ValidatePaymentComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
   },
 
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-
-  // {
-  //   path: 'tour',
-  //   component: TourComponent,
-  //   canActivate: [
-  //     AuthGuard,
-  //     (route: ActivatedRouteSnapshot) => RoleGuard(route),
-  //   ],
-  //   data: { role: 'admin' },
-  // },
+  { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule{ }

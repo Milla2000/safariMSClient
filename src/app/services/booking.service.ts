@@ -9,9 +9,9 @@ import { IResponseDto } from '../models/user.model';
   providedIn: 'root',
 })
 export class BookingService {
-  private apiUrl = 'https://localhost:7074/api/Booking'; // Adjust the base URL as needed
+  private readonly apiUrl = 'https://localhost:7074/api/Booking'; 
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Add a new booking
   addBooking(bookingData: IBookingDto): Observable<IResponseDto> {

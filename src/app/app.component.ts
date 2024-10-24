@@ -10,7 +10,7 @@ import {  ITour } from './models/tour.model';
 export class AppComponent implements OnInit {
   tours: ITour[] = [];
 
-  constructor(private tourService: TourService) {}
+  constructor(private readonly tourService: TourService) {}
 
   ngOnInit(): void {
     this.tourService.getAllTours().subscribe((data) => {

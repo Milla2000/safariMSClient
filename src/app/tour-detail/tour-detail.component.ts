@@ -36,11 +36,11 @@ export class TourDetailComponent implements OnInit {
   };
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private tourService: TourService,
-    private hotelService: HotelService,
-    private cloudinaryService: CloudinaryService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly tourService: TourService,
+    private readonly hotelService: HotelService,
+    private readonly cloudinaryService: CloudinaryService
   ) {}
 
   ngOnInit(): void {

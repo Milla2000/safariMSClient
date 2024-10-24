@@ -14,9 +14,9 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7269/api/User';
+  private readonly apiUrl = 'https://localhost:7269/api/User';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   registerUser(registerUserDto: IUserDto): Observable<IResponseDto> {
     return this.http.post<IResponseDto>(`${this.apiUrl}`, registerUserDto).pipe(
@@ -50,11 +50,7 @@ export class AuthService {
       })
     );
   }
-  // AuthService to get token and role
-  // getToken(): string | null {
-  //   return localStorage.getItem('token');
-  // }
-  // AuthService to get token and role
+
   getTokenandRole(): { token: string | null; role: string | null } {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');

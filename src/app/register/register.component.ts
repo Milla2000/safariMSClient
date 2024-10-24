@@ -17,7 +17,7 @@ export class RegisterComponent {
   };
   registrationResponse?: IResponseDto;
 
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   register(): void {
     this.authService.registerUser(this.userDto).subscribe((response) => {

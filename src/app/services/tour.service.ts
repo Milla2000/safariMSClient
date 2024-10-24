@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { IAddTourDto, ITourImageDto } from '../models/tour.model'; // Adjust the path as needed
+import { IAddTourDto} from '../models/tour.model'; 
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class TourService {
-  private apiUrl = 'https://localhost:7032/api/Tour';
+  private readonly apiUrl = 'https://localhost:7032/api/Tour';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getAllTours(): Observable<any> {
     return this.http.get<any>(this.apiUrl + '/getAllTours');

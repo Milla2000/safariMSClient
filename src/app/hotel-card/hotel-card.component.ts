@@ -13,8 +13,8 @@ export class HotelCardComponent implements OnInit {
   hotel: IHotelResponseDto | null = null; // Single hotel data
   hotelId: string | null = null; // Hotel Id captured from route
   constructor(
-    private hotelService: HotelService,
-    private route: ActivatedRoute // For getting hotel Id from the route
+    private readonly hotelService: HotelService,
+    private readonly route: ActivatedRoute // For getting hotel Id from the route
   ) {}
 
   ngOnInit(): void {
@@ -26,10 +26,10 @@ export class HotelCardComponent implements OnInit {
 
   async getHotel(id: string): Promise<void> {
     try {
-      const data = await firstValueFrom(this.hotelService.getHotelById(id)); 
+      const data = await firstValueFrom(this.hotelService.getHotelById(id));
       this.hotel = {
-        rating: 4.5, 
-        reviews: 120, 
+        rating: 4.5,
+        reviews: 120,
         errormessage: data.errormessage,
         result: data.result,
         isSuccess: data.isSuccess,

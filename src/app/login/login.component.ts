@@ -17,9 +17,9 @@ export class LoginComponent {
   userData: any;
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +41,7 @@ export class LoginComponent {
           // Use this.route.snapshot instead of this.router.snapshot
           const returnUrl =
             this.route.snapshot.queryParams['returnUrl'] || '/tour';
-              // this.route.routerState.queryParams['returnUrl'] || '/tour';
+          // this.route.routerState.queryParams['returnUrl'] || '/tour';
           this.router.navigateByUrl(returnUrl);
         } else {
           console.error('Login failed:', response.errormessage);
