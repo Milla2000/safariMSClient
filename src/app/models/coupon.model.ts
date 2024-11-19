@@ -3,3 +3,11 @@ export interface AddCouponDto {
   couponAmount: number;
   couponMinAmount: number;
 }
+
+export interface ICouponResponseDto {
+  errormessage: string;
+  result: {
+    coupon: AddCouponDto;
+  };
+  isSuccess: boolean;
+}

@@ -2,60 +2,62 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AddCouponDto } from '../models/coupon.model';
+import { AddCouponDto, ICouponResponseDto } from '../models/coupon.model';
 import { IResponseDto } from '../models/user.model';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class CouponService {
-  private readonly apiUrl = 'https://localhost:7269/api/Coupon';
+  private readonly apiUrl = 'https://localhost:7198/api/Coupon';
 
   constructor(private readonly http: HttpClient) {}
 
   // Get all coupons
-  getAllCoupons(): Observable<IResponseDto> {
+  getAllCoupons(): Observable<ICouponResponseDto> {
     return this.http
-      .get<IResponseDto>(`${this.apiUrl}/getAll`)
-      .pipe(map((response: IResponseDto) => response));
+      .get<ICouponResponseDto>(`${this.apiUrl}/getAll`)
+      .pipe(map((response: ICouponResponseDto) => response));
   }
 
   // Get a single coupon by ID
-  getCouponById(id: string): Observable<IResponseDto> {
+  getCouponById(id: string): Observable<ICouponResponseDto> {
     return this.http
-      .get<IResponseDto>(`${this.apiUrl}/single/${id}`)
-      .pipe(map((response: IResponseDto) => response));
+      .get<ICouponResponseDto>(`${this.apiUrl}/single/${id}`)
+      .pipe(map((response: ICouponResponseDto) => response));
   }
 
   // Get a coupon by code
-  getCouponByCode(code: string): Observable<IResponseDto> {
+  getCouponByCode(code: string): Observable<ICouponResponseDto> {
     return this.http
-      .get<IResponseDto>(`${this.apiUrl}/getCoupun/${code}`)
-      .pipe(map((response: IResponseDto) => response));
+      .get<ICouponResponseDto>(`${this.apiUrl}/getCoupun/${code}`)
+      .pipe(map((response: ICouponResponseDto) => response));
   }
 
   // Add a new coupon
-  addCoupon(newCoupon: AddCouponDto): Observable<IResponseDto> {
+  addCoupon(newCoupon: AddCouponDto): Observable<ICouponResponseDto> {
     return this.http
-      .post<IResponseDto>(`${this.apiUrl}/addCoupon`, newCoupon)
-      .pipe(map((response: IResponseDto) => response));
+      .post<ICouponResponseDto>(`${this.apiUrl}/addCoupon`, newCoupon)
+      .pipe(map((response: ICouponResponseDto) => response));
   }
 
   // Update an existing coupon by ID
   updateCoupon(
     id: string,
     updatedCoupon: AddCouponDto
-  ): Observable<IResponseDto> {
+  ): Observable<ICouponResponseDto> {
     return this.http
-      .put<IResponseDto>(`${this.apiUrl}/updateCoupon/${id}`, updatedCoupon)
-      .pipe(map((response: IResponseDto) => response));
+      .put<ICouponResponseDto>(
+        `${this.apiUrl}/updateCoupon/${id}`,
+        updatedCoupon
+      )
+      .pipe(map((response: ICouponResponseDto) => response));
   }
 
   // Delete a coupon by ID
-  deleteCoupon(id: string): Observable<IResponseDto> {
+  deleteCoupon(id: string): Observable<ICouponResponseDto> {
     return this.http
-      .delete<IResponseDto>(`${this.apiUrl}/deleteCoupon/${id}`)
-      .pipe(map((response: IResponseDto) => response));
+      .delete<ICouponResponseDto>(`${this.apiUrl}/deleteCoupon/${id}`)
+      .pipe(map((response: ICouponResponseDto) => response));
   }
 }
