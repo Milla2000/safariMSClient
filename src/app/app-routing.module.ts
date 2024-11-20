@@ -9,6 +9,7 @@ import { TourDetailComponent } from './tour-detail/tour-detail.component';
 import { HotelCardComponent } from './hotel-card/hotel-card.component';
 import { BookingCardComponent } from './booking-card/booking-card.component';
 import { ValidatePaymentComponent } from './validate-payment/validate-payment.component';
+import { CouponComponent } from './coupon/coupon.component';
 // import {  } from '@angular/router';
 
 const routes: Routes = [
@@ -16,20 +17,36 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'tour/:id', component: TourDetailComponent },
   { path: 'hotel/:id', component: HotelCardComponent },
+
   {
     path: 'bookingatour/:id',
     component: BookingCardComponent,
     canActivate: [AuthGuard]
   },
+
   {
     path: 'validatepayment/:id',
     component: ValidatePaymentComponent,
     canActivate: [AuthGuard]
   },
+
   {
     path: 'dashboard',
     component: DashboardComponent,
   },
+
+  {
+    path: 'tour',
+    component: TourComponent,
+    canActivate: [
+      AuthGuard,
+      (route: ActivatedRouteSnapshot) => RoleGuard(route),
+    ],
+    data: { role: 'admin' },
+  },
+
+  //add a route to the coupon component
+  { path: 'coupon', component: CouponComponent },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

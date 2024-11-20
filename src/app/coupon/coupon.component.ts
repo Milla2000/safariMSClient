@@ -13,17 +13,16 @@ export class CouponComponent implements OnInit {
   coupons: AddCouponDto[] = [];
   isLoading = false;
   errorMessage: string | null = null;
+  isEdit = false;
+  editingCouponCode: string | null = null;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private couponService: CouponService
+    private readonly formBuilder: FormBuilder,
+    private readonly couponService: CouponService
   ) {
     this.couponForm = this.formBuilder.group({
       couponCode: ['', Validators.required],
-      couponAmount: [
-        100,
-        [Validators.required, Validators.min(100), Validators.max(100000)],
-      ],
+      couponAmount: [100, [Validators.required, Validators.min(100)]],
       couponMinAmount: [1000, [Validators.required, Validators.min(1000)]],
     });
   }
@@ -32,12 +31,13 @@ export class CouponComponent implements OnInit {
     this.getCoupons();
   }
 
-  // Fetch all coupons
   getCoupons() {
     this.isLoading = true;
     this.couponService.getAllCoupons().subscribe({
-      next: (response) => {
-        this.coupons = [response.result.coupon];
+      next: (response: ICouponResponseDto) => {
+        console.log('Response:', response);
+        this.coupons = response.result || [];
+        console.log('Coupons:', this.coupons);
         this.isLoading = false;
       },
       error: (error) => {
@@ -47,16 +47,21 @@ export class CouponComponent implements OnInit {
     });
   }
 
-  // Add a new coupon
   addCoupon() {
     if (this.couponForm.invalid) {
+      console.log('Invalid form');
       return;
     }
     const newCoupon: AddCouponDto = this.couponForm.value;
     this.couponService.addCoupon(newCoupon).subscribe({
       next: (response) => {
-        this.coupons.push(response.result.coupon);
-        this.couponForm.reset();
+        if (response.isSuccess) {
+          // Optionally, you can fetch the coupons again to update the list
+          this.getCoupons();
+          this.couponForm.reset();
+        } else {
+          this.errorMessage = response.errormessage;
+        }
       },
       error: (error) => {
         this.errorMessage = error.message;
@@ -64,11 +69,38 @@ export class CouponComponent implements OnInit {
     });
   }
 
-  // Delete a coupon by ID
-  deleteCoupon(couponId: string) {
-    this.couponService.deleteCoupon(couponId).subscribe({
+  populateForm(coupon: AddCouponDto) {
+    this.couponForm.patchValue(coupon);
+    this.isEdit = true;
+    this.editingCouponCode = coupon.couponCode;
+  }
+
+  updateCoupon() {
+    if (!this.editingCouponCode || this.couponForm.invalid) {
+      return;
+    }
+    const updatedCoupon: AddCouponDto = this.couponForm.value;
+    this.couponService
+      .updateCoupon(this.editingCouponCode, updatedCoupon)
+      .subscribe({
+        next: () => {
+          this.getCoupons();
+          this.couponForm.reset();
+          this.isEdit = false;
+          this.editingCouponCode = null;
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+        },
+      });
+  }
+
+  deleteCoupon(couponCode: string) {
+    console.log('Deleting coupon:', couponCode);
+    this.couponService.deleteCoupon(couponCode).subscribe({
       next: () => {
-        this.coupons = this.coupons.filter((c) => c.couponCode !== couponId);
+        this.coupons = this.coupons.filter((c) => c.couponCode !== couponCode);
+        this.getCoupons();
       },
       error: (error) => {
         this.errorMessage = error.message;

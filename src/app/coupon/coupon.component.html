@@ -1,1 +1,53 @@
-<p>coupon works!</p>
+<div class="coupon-container">
+    <h2>Coupon Management</h2>
+
+    <!-- Coupon Table -->
+    <table class="coupon-table">
+        <thead>
+            <tr>
+                <th>Coupon Code</th>
+                <th>Amount</th>
+                <th>Minimum Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let coupon of coupons">
+                <td>{{ coupon.couponCode }}</td>
+                <td>{{ coupon.couponAmount | currency: 'USD' }}</td>
+                <td>{{ coupon.couponMinAmount | currency: 'USD' }}</td>
+                <td>
+                    <button class="explore-btn" (click)="populateForm(coupon)">Edit</button>
+                    <button class="explore-btn" (click)="deleteCoupon(coupon.id)">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Add/Update Form -->
+    <div class="add-tour-form">
+        <h2>{{ isEdit ? "Update" : "Add" }} Coupon</h2>
+        <form [formGroup]="couponForm" (ngSubmit)="isEdit ? updateCoupon() : addCoupon()">
+            <div class="form-group">
+                <label for="couponCode">Coupon Code</label>
+                <input id="couponCode" formControlName="couponCode" [readonly]="isEdit"
+                    placeholder="Enter Coupon Code" />
+            </div>
+            <div class="form-group">
+                <label for="couponAmount">Coupon Amount</label>
+                <input id="couponAmount" type="number" formControlName="couponAmount"
+                    placeholder="Enter Coupon Amount" />
+            </div>
+            <div class="form-group">
+                <label for="couponMinAmount">Minimum Amount</label>
+                <input id="couponMinAmount" type="number" formControlName="couponMinAmount"
+                    placeholder="Enter Minimum Amount" />
+            </div>
+            <button class="add-tour-btn" type="submit">
+                {{ isEdit ? "Update" : "Add" }} Coupon
+            </button>
+        </form>
+    </div>
+</div>

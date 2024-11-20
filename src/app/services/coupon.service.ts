@@ -13,6 +13,7 @@ export class CouponService {
 
   constructor(private readonly http: HttpClient) {}
 
+
   // Get all coupons
   getAllCoupons(): Observable<ICouponResponseDto> {
     return this.http
@@ -56,6 +57,7 @@ export class CouponService {
 
   // Delete a coupon by ID
   deleteCoupon(id: string): Observable<ICouponResponseDto> {
+    console.log('Deleting coupon:', id);
     return this.http
       .delete<ICouponResponseDto>(`${this.apiUrl}/deleteCoupon/${id}`)
       .pipe(map((response: ICouponResponseDto) => response));
