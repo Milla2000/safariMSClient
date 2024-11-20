@@ -72,7 +72,7 @@ export class CouponComponent implements OnInit {
   populateForm(coupon: AddCouponDto) {
     this.couponForm.patchValue(coupon);
     this.isEdit = true;
-    this.editingCouponCode = coupon.couponCode;
+    this.editingCouponCode = coupon.id;
   }
 
   updateCoupon() {
