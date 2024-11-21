@@ -51,7 +51,7 @@ export class LoginComponent {
 
   getUserData(): void {
     this.authService
-      .getUserById('e23f78bf-6fe8-4aab-a96a-59ba86054299')
+      .getUserById(this.userId)
       .subscribe((response: IResponseDto) => {
         if (response.isSuccess) {
           this.userData = response.result;
