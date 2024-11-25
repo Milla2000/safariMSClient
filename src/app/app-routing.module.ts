@@ -21,13 +21,13 @@ const routes: Routes = [
   {
     path: 'bookingatour/:id',
     component: BookingCardComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
 
   {
     path: 'validatepayment/:id',
     component: ValidatePaymentComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
 
   {
@@ -46,9 +46,17 @@ const routes: Routes = [
   },
 
   //add a route to the coupon component
-  { path: 'coupon', component: CouponComponent },
+  {
+    path: 'coupon',
+    component: CouponComponent,
+    canActivate: [
+      AuthGuard,
+      (route: ActivatedRouteSnapshot) => RoleGuard(route),
+    ],
+    data: { role: 'admin' },
+  },
 
-  { path: '', redirectTo: '/login', pathMatch: 'full' }
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 @NgModule({
