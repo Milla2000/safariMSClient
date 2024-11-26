@@ -37,7 +37,7 @@ export class CouponComponent implements OnInit {
       next: (response: ICouponResponseDto) => {
         this.coupons = response.result || [];
         console.log('Coupons:', this.coupons);
-        this.filterBestCouponForAmount(30);
+        // this.filterBestCouponForAmount(30);
         this.isLoading = false;
       },
       error: (error) => {
@@ -63,7 +63,7 @@ export class CouponComponent implements OnInit {
       (best, current) =>
         current.couponAmount > best.couponAmount ? current : best,
       validCoupons[0]
-    ); // Find the largest coupon
+    ); 
 
     console.log('Best coupon for the customer:', bestCoupon);
     return bestCoupon;

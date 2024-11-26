@@ -6,6 +6,7 @@ import { HotelService } from '../services/hotel.service';
 import { IBookingDto } from '../models/booking.model';
 import { IHotel } from '../models/hotel.model';
 import { IStripeRequestDto } from '../models/stripe.model';
+import { CouponComponent } from '../coupon/coupon.component';
 
 @Component({
   selector: 'app-booking-card',
@@ -21,11 +22,14 @@ export class BookingCardComponent implements OnInit {
   kids: number = 0;
   bookingTotal: number = 0;
   bookingId: string | null = null;
+  bestCouponCode: string | null = null;
+  selectedCouponCode: string | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly bookingService: BookingService,
     private readonly hotelService: HotelService,
+    private readonly couponComponent: CouponComponent,
     private readonly router: Router
   ) {}
 
@@ -111,6 +115,29 @@ export class BookingCardComponent implements OnInit {
     this.bookingTotal = response.result.bookingTotalPrice;
     this.bookingId = response.result.bookingId;
     console.log('Booking successful:', response);
+  }
+
+  applyCoupon(): void {
+    if (!this.bestCouponCode || !this.bookingId) {
+      this.errorMessage = 'No coupon to apply or booking ID is missing.';
+      return;
+    }
+
+    this.bookingService
+      .applyCoupon(this.bookingId, this.bestCouponCode)
+      .subscribe({
+        next: (response) => {
+          if (response.isSuccess) {
+            this.bookingTotal -= response.result.discount;
+            this.errorMessage = '';
+          } else {
+            this.errorMessage = response.errormessage;
+          }
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+        },
+      });
   }
 
   // Add this method to handle payments
