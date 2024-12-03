@@ -24,6 +24,7 @@ export class BookingCardComponent implements OnInit {
   bookingId: string | null = null;
   bestCouponCode: string | null = null;
   selectedCouponCode: string | null = null;
+  errorMessage: string = '';
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -117,9 +118,32 @@ export class BookingCardComponent implements OnInit {
     console.log('Booking successful:', response);
   }
 
+  // async applyBestCoupon(): Promise<void> {
+  //   if (!this.bookingTotal) {
+  //     console.error('Booking total is missing');
+  //     return;
+  //   }
+
+  //   try {
+  //     const bestCoupon = await this.couponComponent.getCoupons();
+
+  //     if (!bestCoupon) {
+  //       console.error('No valid coupon found for the specified amount.');
+  //       return;
+  //     }
+
+  //     this.bestCouponCode = bestCoupon.couponCode;
+  //     console.log('Best coupon for the customer:', bestCoupon);
+  //   } catch (error) {
+  //     console.error('Error applying coupon:', error);
+  //   }
+  // }
+
   applyCoupon(): void {
-    if (!this.bestCouponCode || !this.bookingId) {
+    // both the booking id and the best coupon code must be available
+    if (!this.bookingId || !this.bestCouponCode) {
       this.errorMessage = 'No coupon to apply or booking ID is missing.';
+      console.error(this.errorMessage);
       return;
     }
 
@@ -128,7 +152,7 @@ export class BookingCardComponent implements OnInit {
       .subscribe({
         next: (response) => {
           if (response.isSuccess) {
-            this.bookingTotal -= response.result.discount;
+            this.submitBooking();
             this.errorMessage = '';
           } else {
             this.errorMessage = response.errormessage;
