@@ -7,6 +7,7 @@ import { IBookingDto } from '../models/booking.model';
 import { IHotel } from '../models/hotel.model';
 import { IStripeRequestDto } from '../models/stripe.model';
 import { CouponComponent } from '../coupon/coupon.component';
+import { AddCouponDto } from '../models/coupon.model';
 
 @Component({
   selector: 'app-booking-card',
@@ -25,6 +26,7 @@ export class BookingCardComponent implements OnInit {
   bestCouponCode: string | null = null;
   selectedCouponCode: string | null = null;
   errorMessage: string = '';
+  coupons: AddCouponDto[] = [];
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -138,6 +140,27 @@ export class BookingCardComponent implements OnInit {
   //     console.error('Error applying coupon:', error);
   //   }
   // }
+
+  filterBestCouponForAmount(amount: number) {
+    // Find the best coupon whose min amount has been attained
+    const validCoupons = this.coupons.filter(
+      (coupon) => coupon.couponMinAmount <= amount
+    ); // Filter by minAmount condition
+
+    if (validCoupons.length === 0) {
+      console.log('No valid coupon found for the specified amount.');
+      return null;
+    }
+
+    const bestCoupon = validCoupons.reduce(
+      (best, current) =>
+        current.couponAmount > best.couponAmount ? current : best,
+      validCoupons[0]
+    );
+
+    console.log('Best coupon for the customer:', bestCoupon);
+    return bestCoupon;
+  }
 
   applyCoupon(): void {
     // both the booking id and the best coupon code must be available

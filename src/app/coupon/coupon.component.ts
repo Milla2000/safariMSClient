@@ -48,26 +48,6 @@ export class CouponComponent implements OnInit {
   }
 
 
-  filterBestCouponForAmount(amount: number) {
-    // Find the best coupon whose min amount has been attained
-    const validCoupons = this.coupons.filter(
-      (coupon) => coupon.couponMinAmount <= amount
-    ); // Filter by minAmount condition
-
-    if (validCoupons.length === 0) {
-      console.log('No valid coupon found for the specified amount.');
-      return null;
-    }
-
-    const bestCoupon = validCoupons.reduce(
-      (best, current) =>
-        current.couponAmount > best.couponAmount ? current : best,
-      validCoupons[0]
-    ); 
-
-    console.log('Best coupon for the customer:', bestCoupon);
-    return bestCoupon;
-  }
   
 
   addCoupon() {
