@@ -31,24 +31,24 @@ export class CouponComponent implements OnInit {
     this.getCoupons();
   }
 
-  getCoupons() {
+  getCoupons(): Promise<any[]> {
     this.isLoading = true;
-    this.couponService.getAllCoupons().subscribe({
-      next: (response: ICouponResponseDto) => {
-        this.coupons = response.result || [];
-        console.log('Coupons:', this.coupons);
-        // this.filterBestCouponForAmount(30);
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.errorMessage = error.message;
-        this.isLoading = false;
-      },
+    return new Promise((resolve, reject) => {
+      this.couponService.getAllCoupons().subscribe({
+        next: (response: ICouponResponseDto) => {
+          this.coupons = response.result || [];
+          console.log('Coupons:', this.coupons);
+          this.isLoading = false;
+          resolve(this.coupons);
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+          this.isLoading = false;
+          reject(error);
+        },
+      });
     });
   }
-
-
-  
 
   addCoupon() {
     if (this.couponForm.invalid) {

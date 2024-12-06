@@ -120,28 +120,19 @@ export class BookingCardComponent implements OnInit {
     console.log('Booking successful:', response);
   }
 
-  // async applyBestCoupon(): Promise<void> {
-  //   if (!this.bookingTotal) {
-  //     console.error('Booking total is missing');
-  //     return;
-  //   }
-
-  //   try {
-  //     const bestCoupon = await this.couponComponent.getCoupons();
-
-  //     if (!bestCoupon) {
-  //       console.error('No valid coupon found for the specified amount.');
-  //       return;
-  //     }
-
-  //     this.bestCouponCode = bestCoupon.couponCode;
-  //     console.log('Best coupon for the customer:', bestCoupon);
-  //   } catch (error) {
-  //     console.error('Error applying coupon:', error);
-  //   }
-  // }
-
   filterBestCouponForAmount(amount: number) {
+
+  //call the getCoupons method from the coupon component
+   this.couponComponent
+     .getCoupons()
+     .then((coupons) => {
+       this.coupons = coupons;
+       console.log('Coupons in BookingComponent:', this.coupons);
+     })
+     .catch((error) => {
+       console.error('Error fetching coupons:', error);
+     });
+
     // Find the best coupon whose min amount has been attained
     const validCoupons = this.coupons.filter(
       (coupon) => coupon.couponMinAmount <= amount
