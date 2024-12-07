@@ -6,8 +6,8 @@ import { HotelService } from '../services/hotel.service';
 import { IBookingDto } from '../models/booking.model';
 import { IHotel } from '../models/hotel.model';
 import { IStripeRequestDto } from '../models/stripe.model';
-import { CouponComponent } from '../coupon/coupon.component';
-import { AddCouponDto } from '../models/coupon.model';
+import { AddCouponDto, ICouponResponseDto } from '../models/coupon.model';
+import { CouponService } from '../services/coupon.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -27,16 +27,19 @@ export class BookingCardComponent implements OnInit {
   selectedCouponCode: string | null = null;
   errorMessage: string = '';
   coupons: AddCouponDto[] = [];
+  showToast: boolean = false;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly bookingService: BookingService,
     private readonly hotelService: HotelService,
-    private readonly couponComponent: CouponComponent,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly couponService: CouponService
   ) {}
 
   ngOnInit(): void {
+    this.getCoupons();
+
     this.initializeTourId();
     // Retrieve user JSON string from localStorage
     const userString = localStorage.getItem('user');
@@ -120,19 +123,19 @@ export class BookingCardComponent implements OnInit {
     console.log('Booking successful:', response);
   }
 
+  getCoupons() {
+    this.couponService.getAllCoupons().subscribe({
+      next: (response: ICouponResponseDto) => {
+        this.coupons = response.result || [];
+        console.log('Coupons:', this.coupons);
+      },
+      error: (error) => {
+        this.errorMessage = error.message;
+      },
+    });
+  }
+
   filterBestCouponForAmount(amount: number) {
-
-  //call the getCoupons method from the coupon component
-   this.couponComponent
-     .getCoupons()
-     .then((coupons) => {
-       this.coupons = coupons;
-       console.log('Coupons in BookingComponent:', this.coupons);
-     })
-     .catch((error) => {
-       console.error('Error fetching coupons:', error);
-     });
-
     // Find the best coupon whose min amount has been attained
     const validCoupons = this.coupons.filter(
       (coupon) => coupon.couponMinAmount <= amount
@@ -140,6 +143,7 @@ export class BookingCardComponent implements OnInit {
 
     if (validCoupons.length === 0) {
       console.log('No valid coupon found for the specified amount.');
+      this.showToastNotification("You don't qualify for any coupon.");
       return null;
     }
 
@@ -148,32 +152,35 @@ export class BookingCardComponent implements OnInit {
         current.couponAmount > best.couponAmount ? current : best,
       validCoupons[0]
     );
+    this.bestCouponCode = bestCoupon.couponCode;
 
-    console.log('Best coupon for the customer:', bestCoupon);
-    return bestCoupon;
+    console.log('Best coupon for the customer:', this.bestCouponCode);
+    return this.bestCouponCode;
   }
 
   applyCoupon(): void {
-    // both the booking id and the best coupon code must be available
-    if (!this.bookingId || !this.bestCouponCode) {
+    this.filterBestCouponForAmount(this.bookingTotal);
+    if (!this.bestCouponCode || !this.bookingId) {
       this.errorMessage = 'No coupon to apply or booking ID is missing.';
-      console.error(this.errorMessage);
+      this.showToastNotification('No coupon to apply or booking ID is missing.');
       return;
     }
-
-    this.bookingService
+     console.log('Applying coupon:', this.bestCouponCode, this.bookingId);
+     this.bookingService
       .applyCoupon(this.bookingId, this.bestCouponCode)
       .subscribe({
-        next: (response) => {
+    next: (response) => {
           if (response.isSuccess) {
-            this.submitBooking();
+            this.bookingTotal = response.result.total;
             this.errorMessage = '';
           } else {
             this.errorMessage = response.errormessage;
+            this.showToastNotification(this.errorMessage);
           }
         },
         error: (error) => {
           this.errorMessage = error.message;
+          this.showToastNotification(this.errorMessage);
         },
       });
   }
@@ -214,5 +221,13 @@ export class BookingCardComponent implements OnInit {
     } catch (error) {
       console.error('Payment failed:', error);
     }
+  }
+
+  showToastNotification(message: string): void {
+    this.errorMessage = message;
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
   }
 }

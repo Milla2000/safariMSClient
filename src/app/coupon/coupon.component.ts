@@ -31,23 +31,43 @@ export class CouponComponent implements OnInit {
     this.getCoupons();
   }
 
-  getCoupons(): Promise<any[]> {
+  getCoupons() {
     this.isLoading = true;
-    return new Promise((resolve, reject) => {
-      this.couponService.getAllCoupons().subscribe({
-        next: (response: ICouponResponseDto) => {
-          this.coupons = response.result || [];
-          console.log('Coupons:', this.coupons);
-          this.isLoading = false;
-          resolve(this.coupons);
-        },
-        error: (error) => {
-          this.errorMessage = error.message;
-          this.isLoading = false;
-          reject(error);
-        },
-      });
+    this.couponService.getAllCoupons().subscribe({
+      next: (response: ICouponResponseDto) => {
+        this.coupons = response.result || [];
+        console.log('Coupons:', this.coupons);
+        // this.filterBestCouponForAmount(30);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = error.message;
+        this.isLoading = false;
+      },
     });
+  }
+
+
+
+  filterBestCouponForAmount(amount: number) {
+    // Find the best coupon whose min amount has been attained
+    const validCoupons = this.coupons.filter(
+      (coupon) => coupon.couponMinAmount <= amount
+    ); // Filter by minAmount condition
+
+    if (validCoupons.length === 0) {
+      console.log('No valid coupon found for the specified amount.');
+      return null;
+    }
+
+    const bestCoupon = validCoupons.reduce(
+      (best, current) =>
+        current.couponAmount > best.couponAmount ? current : best,
+      validCoupons[0]
+    );
+
+    console.log('Best coupon for the customer:', bestCoupon);
+    return bestCoupon;
   }
 
   addCoupon() {

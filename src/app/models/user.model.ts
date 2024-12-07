@@ -12,6 +12,8 @@ export interface IResponseDto {
     token: string;
     user: UserDto;
     role: string;
+    message: string;
+    total: number;
   };
 
   isSuccess: boolean;
