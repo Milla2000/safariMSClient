@@ -24,6 +24,7 @@ export class BookingCardComponent implements OnInit {
   bookingId: string | null = null;
   bestCouponCode: string | null = null;
   selectedCouponCode: string | null = null;
+  errorMessage: string | undefined;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -128,7 +129,7 @@ export class BookingCardComponent implements OnInit {
       .subscribe({
         next: (response) => {
           if (response.isSuccess) {
-            this.bookingTotal -= response.result.discount;
+            // this.bookingTotal -= response.result;
             this.errorMessage = '';
           } else {
             this.errorMessage = response.errormessage;
