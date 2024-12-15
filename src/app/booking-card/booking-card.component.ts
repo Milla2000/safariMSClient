@@ -154,7 +154,7 @@ export class BookingCardComponent implements OnInit {
     );
     this.bestCouponCode = bestCoupon.couponCode;
 
-    console.log('Best coupon for the customer:', this.bestCouponCode);
+    // console.log('Best coupon for the customer:', this.bestCouponCode);
     return this.bestCouponCode;
   }
 
@@ -162,25 +162,29 @@ export class BookingCardComponent implements OnInit {
     this.filterBestCouponForAmount(this.bookingTotal);
     if (!this.bestCouponCode || !this.bookingId) {
       this.errorMessage = 'No coupon to apply or booking ID is missing.';
-      this.showToastNotification('No coupon to apply or booking ID is missing.');
+      this.showToastNotification(
+        'No coupon to apply or booking ID is missing.'
+      );
       return;
     }
-     console.log('Applying coupon:', this.bestCouponCode, this.bookingId);
-     this.bookingService
+    console.log('Applying coupon:', this.bestCouponCode,  this.bookingId);
+    this.bookingService
       .applyCoupon(this.bookingId, this.bestCouponCode)
       .subscribe({
-    next: (response) => {
+        next: (response) => {
           if (response.isSuccess) {
             this.bookingTotal = response.result.total;
             this.errorMessage = '';
           } else {
             this.errorMessage = response.errormessage;
+            // console.log('Error applying coupon:', this.errorMessage);
             this.showToastNotification(this.errorMessage);
           }
         },
         error: (error) => {
-          this.errorMessage = error.message;
+          this.errorMessage = error;
           this.showToastNotification(this.errorMessage);
+          console.log('Error applying coupon:', this.errorMessage);
         },
       });
   }

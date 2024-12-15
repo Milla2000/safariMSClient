@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IBookingDto } from '../models/booking.model';
 import { IStripeRequestDto } from '../models/stripe.model';
@@ -35,9 +35,14 @@ export class BookingService {
 
   // Apply a coupon to a booking by its ID
   applyCoupon(bookingId: string, couponCode: string): Observable<IResponseDto> {
-    return this.http.put<IResponseDto>(`${this.apiUrl}/applycoupon`, {
-      BookingId: bookingId,
-      Code: couponCode,
+    // Construct query parameters
+    const params = new HttpParams()
+      .set('Id', bookingId)
+      .set('Code', couponCode);
+    return this.http.put<IResponseDto>(`${this.apiUrl}/applycoupon`,null, {
+      params
     });
   }
+
+  
 }

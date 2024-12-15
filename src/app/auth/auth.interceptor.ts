@@ -11,14 +11,14 @@ import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = this.authService.getTokenandRole().token;
-    const role = this.authService.getTokenandRole().role;
+  
 
 
     // Check if the request URL is for Cloudinary

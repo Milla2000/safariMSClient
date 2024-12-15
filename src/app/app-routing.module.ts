@@ -10,7 +10,6 @@ import { HotelCardComponent } from './hotel-card/hotel-card.component';
 import { BookingCardComponent } from './booking-card/booking-card.component';
 import { ValidatePaymentComponent } from './validate-payment/validate-payment.component';
 import { CouponComponent } from './coupon/coupon.component';
-// import {  } from '@angular/router';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
