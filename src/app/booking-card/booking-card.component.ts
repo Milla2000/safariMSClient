@@ -6,8 +6,11 @@ import { HotelService } from '../services/hotel.service';
 import { IBookingDto } from '../models/booking.model';
 import { IHotel } from '../models/hotel.model';
 import { IStripeRequestDto } from '../models/stripe.model';
-import { AddCouponDto, ICouponResponseDto } from '../models/coupon.model';
+import { AddCouponDto, ICouponResponseDto} from '../models/coupon.model';
+import { IResponseDto } from '../models/user.model';
 import { CouponService } from '../services/coupon.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -27,14 +30,15 @@ export class BookingCardComponent implements OnInit {
   selectedCouponCode: string | null = null;
   errorMessage: string = '';
   coupons: AddCouponDto[] = [];
-  showToast: boolean = false;
+  couponApplied = false;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly bookingService: BookingService,
     private readonly hotelService: HotelService,
     private readonly router: Router,
-    private readonly couponService: CouponService
+    private readonly couponService: CouponService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -143,7 +147,7 @@ export class BookingCardComponent implements OnInit {
 
     if (validCoupons.length === 0) {
       console.log('No valid coupon found for the specified amount.');
-      this.showToastNotification("You don't qualify for any coupon.");
+      this.toastService.showToast("You don't qualify for any coupon.");
       return null;
     }
 
@@ -162,28 +166,32 @@ export class BookingCardComponent implements OnInit {
     this.filterBestCouponForAmount(this.bookingTotal);
     if (!this.bestCouponCode || !this.bookingId) {
       this.errorMessage = 'No coupon to apply or booking ID is missing.';
-      this.showToastNotification(
+      this.toastService.showToast(
         'No coupon to apply or booking ID is missing.'
       );
       return;
     }
-    console.log('Applying coupon:', this.bestCouponCode,  this.bookingId);
+    console.log('Applying coupon:', this.bestCouponCode, this.bookingId);
     this.bookingService
       .applyCoupon(this.bookingId, this.bestCouponCode)
       .subscribe({
-        next: (response) => {
+        next: (response: IResponseDto) => {
           if (response.isSuccess) {
             this.bookingTotal = response.result.total;
+            this.toastService.showToast('Coupon applied successfully:');
+            this.couponApplied = true; 
             this.errorMessage = '';
           } else {
             this.errorMessage = response.errormessage;
             // console.log('Error applying coupon:', this.errorMessage);
-            this.showToastNotification(this.errorMessage);
+            this.toastService.showToast(this.errorMessage);
           }
         },
-        error: (error) => {
-          this.errorMessage = error;
-          this.showToastNotification(this.errorMessage);
+        error: (response: HttpErrorResponse) => {
+          console.log('Error applying coupon:', response);
+          this.errorMessage =
+            response.error.errormessage || 'An error occurred';
+          this.toastService.showToast(this.errorMessage);
           console.log('Error applying coupon:', this.errorMessage);
         },
       });
@@ -225,13 +233,5 @@ export class BookingCardComponent implements OnInit {
     } catch (error) {
       console.error('Payment failed:', error);
     }
-  }
-
-  showToastNotification(message: string): void {
-    this.errorMessage = message;
-    this.showToast = true;
-    setTimeout(() => {
-      this.showToast = false;
-    }, 3000);
   }
 }

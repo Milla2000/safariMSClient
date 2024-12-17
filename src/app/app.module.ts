@@ -19,7 +19,8 @@ import { HotelCardComponent } from './hotel-card/hotel-card.component';
 import { BookingCardComponent } from './booking-card/booking-card.component';
 import { ValidatePaymentComponent } from './validate-payment/validate-payment.component';
 import { CouponComponent } from './coupon/coupon.component';
-
+import { ToastComponent } from './toast/toast.component';
+import { ToastService } from './services/toast.service';
 
 
 @NgModule({
@@ -36,11 +37,19 @@ import { CouponComponent } from './coupon/coupon.component';
     BookingCardComponent,
     ValidatePaymentComponent,
     CouponComponent,
+    ToastComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
   providers: [
     AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    ToastService
   ],
   bootstrap: [AppComponent],
 })

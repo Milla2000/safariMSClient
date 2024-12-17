@@ -9,3 +9,37 @@ html, body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* booking-card.component.css */
+.toast {
+  position: fixed;
+  top: 8px;
+  right: -250px; /* Start off screen */
+  width: 250px;
+  background-color: rgb(29, 30, 31);
+  color: white;
+  padding: 10px; /* Adjust padding as needed */
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  z-index: 9999;
+  animation: slideInRight 0.5s forwards, slideOutLeft 0.5s 2.5s forwards;
+}
+
+.toast-text {
+  flex: 1;
+  margin-right: 10px;
+}
+
+@keyframes slideInRight {
+  to {
+    right: 20px; /* End position */
+  }
+}
+
+@keyframes slideOutLeft {
+  to {
+    right: -250px; /* Off screen */
+  }
+}

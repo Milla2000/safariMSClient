@@ -40,7 +40,7 @@
         <p>Booking ID: {{ bookingId }}</p>
 
         <!-- button to apply coupon -->
-        <button class="btn btn-primary" (click)="applyCoupon()">Apply Coupon</button>
+        <button [disabled]="couponApplied" (click)="applyCoupon()">Apply Coupon</button>
         <!-- Payment Button -->
         <button class="btn btn-success" (click)="makePayment()">Make Payment</button>
     </div>
@@ -50,8 +50,4 @@
         <p>Please select a hotel before proceeding.</p>
     </div>
 
-    <!-- Toast Notification -->
-    <div *ngIf="showToast" class="toast-notification">
-        {{ errorMessage }}
-    </div>
 </div>
