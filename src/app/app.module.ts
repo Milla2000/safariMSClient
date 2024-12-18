@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -21,6 +20,7 @@ import { ValidatePaymentComponent } from './validate-payment/validate-payment.co
 import { CouponComponent } from './coupon/coupon.component';
 import { ToastComponent } from './toast/toast.component';
 import { ToastService } from './services/toast.service';
+import { AdminPageComponent } from './admin-page/admin-page.component';
 
 
 @NgModule({
@@ -38,6 +38,7 @@ import { ToastService } from './services/toast.service';
     ValidatePaymentComponent,
     CouponComponent,
     ToastComponent,
+    AdminPageComponent,
   ],
   imports: [
     BrowserModule,

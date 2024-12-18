@@ -39,7 +39,7 @@ export class BookingCardComponent implements OnInit {
     private readonly router: Router,
     private readonly couponService: CouponService,
     private readonly toastService: ToastService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getCoupons();
@@ -52,7 +52,8 @@ export class BookingCardComponent implements OnInit {
       this.userId = user.id;
       console.log('User ID:', this.userId);
     } else {
-      alert('Kindly login to place a booking');
+      this.toastService.showToast('Kindly login to place a booking');
+
       // Redirect to login page and pass the current URL to return after login
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: this.router.url },
@@ -79,7 +80,7 @@ export class BookingCardComponent implements OnInit {
 
   private async fetchHotels(): Promise<void> {
     if (!this.tourId) return;
-    console.log('my Tour ID:', this.tourId);
+
     try {
       const response = await firstValueFrom(
         this.hotelService.getHotelsByTourId(this.tourId)
@@ -88,16 +89,28 @@ export class BookingCardComponent implements OnInit {
         this.hotels = response.result;
         console.log('Hotels:', this.hotels);
       } else {
-        console.error('Error fetching hotels:', response.errormessage);
+        this.toastService.showToast(
+          `Error fetching hotels ${response.errormessage}`
+        );
       }
     } catch (error) {
-      console.error('Error fetching hotels:', error);
+      if (error instanceof HttpErrorResponse) {
+        this.toastService.showToast(
+          `An error occurred fetching hotels ${error.message}`
+        );
+      } else {
+        this.toastService.showToast(
+          'An unexpected error occurred whil fetching hotels'
+        );
+      }
     }
   }
 
   async submitBooking(): Promise<void> {
     if (!this.selectedHotelId) {
-      console.error('No hotel selected');
+      this.toastService.showToast(
+        'Please select a hotel first before submitting a booking'
+      );
       return;
     }
 
@@ -106,47 +119,55 @@ export class BookingCardComponent implements OnInit {
       adults: this.adults,
       kids: this.kids,
       tourId: this.tourId!,
-      hotelId: this.selectedHotelId!,
+      hotelId: this.selectedHotelId,
       bookingTotal: 0,
     };
 
     try {
-      // console.log('Booking data:', bookingData);
       const response = await firstValueFrom(
         this.bookingService.addBooking(bookingData)
       );
       this.handleBookingSuccess(response);
     } catch (error) {
-      console.error('Booking failed:', error);
+      this.toastService.showToast(
+        'An error occurred while booking, kindly try again later'
+      );
     }
   }
 
   private handleBookingSuccess(response: any): void {
     this.bookingTotal = response.result.bookingTotalPrice;
     this.bookingId = response.result.bookingId;
-    // console.log('Booking successful:', response);
   }
 
-  getCoupons() {
+  getCoupons(): void {
     this.couponService.getAllCoupons().subscribe({
       next: (response: IResponseDto<AddCouponDto[]>) => {
-        this.coupons = response.result || [];
-        // console.log('Coupons:', this.coupons);
+        if (response.isSuccess) {
+          this.coupons = response.result || [];
+        } else {
+          this.errorMessage = response.errormessage;
+          this.toastService.showToast(
+            `Error fetching coupons: ${this.errorMessage}`
+          );
+        }
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         this.errorMessage = error.message;
+        this.toastService.showToast(
+          `Error fetching coupons: ${this.errorMessage}`
+        );
       },
     });
   }
 
   filterBestCouponForAmount(amount: number) {
-    // Find the best coupon whose min amount has been attained
     const validCoupons = this.coupons.filter(
       (coupon) => coupon.couponMinAmount <= amount
     ); // Filter by minAmount condition
 
     if (validCoupons.length === 0) {
-      console.log('No valid coupon found for the specified amount.');
+      
       this.toastService.showToast("You don't qualify for any coupon.");
       return null;
     }
@@ -158,17 +179,13 @@ export class BookingCardComponent implements OnInit {
     );
     this.bestCouponCode = bestCoupon.couponCode;
 
-    // console.log('Best coupon for the customer:', this.bestCouponCode);
     return this.bestCouponCode;
   }
 
   applyCoupon(): void {
     this.filterBestCouponForAmount(this.bookingTotal);
     if (!this.bestCouponCode || !this.bookingId) {
-      this.errorMessage = 'No coupon to apply or booking ID is missing.';
-      this.toastService.showToast(
-        'No coupon to apply or booking ID is missing.'
-      );
+      this.toastService.showToast('No coupon to apply or booking ID is missing.');
       return;
     }
 
@@ -187,8 +204,7 @@ export class BookingCardComponent implements OnInit {
           }
         },
         error: (response: HttpErrorResponse) => {
-          this.errorMessage =
-            response.error.errormessage || 'An error occurred';
+          this.errorMessage = response.error.errormessage || 'An error occurred';
           this.toastService.showToast(this.errorMessage);
         },
       });
@@ -215,13 +231,13 @@ export class BookingCardComponent implements OnInit {
       );
 
       if (response.isSuccess) {
-        console.log('Payment response:', response);
         if (response.result.stripeSessionUrl) {
           window.location.href = response.result.stripeSessionUrl;
         } else {
           this.toastService.showToast(
             'stripeSessionUrl is missing in response:'
           );
+          return;
         }
       } else {
         this.toastService.showToast(response.errormessage);
@@ -231,7 +247,6 @@ export class BookingCardComponent implements OnInit {
         this.toastService.showToast(
           `Error making payment: ${error.error.message || 'An error occurred'}`
         );
-      
       } else {
         this.toastService.showToast('An unexpected error occurred');
       }

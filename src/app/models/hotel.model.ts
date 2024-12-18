@@ -15,10 +15,3 @@ export interface IHotel {
   reviews?: number;
 }
 
-// export interface IHotelResponseDto {
-//   errormessage: string;
-//   result: IHotel[];
-//   isSuccess: boolean;
-//   rating?: number;
-//   reviews?: number;
-// }

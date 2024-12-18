@@ -21,8 +21,6 @@ export class TourDetailComponent implements OnInit {
   hotels: IHotel[] = [];
   fullHotelResponse: IResponseDto<IHotel[]> | null = null;
   tourId: string | null = null;
-  // isAddImageModalOpen: boolean = false;
-  // isAddHotelModalOpen: boolean = false;
   isModalOpen: boolean = false;
   modalType: 'image' | 'hotel' | null = null;
 

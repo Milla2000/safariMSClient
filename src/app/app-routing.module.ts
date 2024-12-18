@@ -38,10 +38,8 @@ const routes: Routes = [
     path: 'tour',
     component: TourComponent,
     canActivate: [
-      AuthGuard,
-      (route: ActivatedRouteSnapshot) => RoleGuard(route),
-    ],
-    data: { role: 'admin' },
+      AuthGuard
+    ]
   },
 
   //add a route to the coupon component

@@ -4,7 +4,7 @@ import { HotelService } from '../services/hotel.service';
 import { firstValueFrom } from 'rxjs';
 import { IHotel } from '../models/hotel.model';
 import { IResponseDto } from '../models/user.model';
-// import { IHotelResponseDto } from '../models/hotel.model';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-hotel-card',
@@ -16,7 +16,8 @@ export class HotelCardComponent implements OnInit {
   hotelId: string | null = null; // Hotel Id captured from route
   constructor(
     private readonly hotelService: HotelService,
-    private readonly route: ActivatedRoute // For getting hotel Id from the route
+    private readonly route: ActivatedRoute,
+    private readonly toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -39,9 +40,8 @@ export class HotelCardComponent implements OnInit {
         result: hotelWithRating,
         isSuccess: hotelData.isSuccess,
       };
-      console.log('Hotel:', this.hotel);
     } catch (error) {
-      console.error('Error fetching hotel:', error);
+      this.toastService.showToast('Error fetching hotel');
     }
   }
 }

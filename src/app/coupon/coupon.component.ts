@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CouponService } from '../services/coupon.service';
 import { AddCouponDto } from '../models/coupon.model';
 import { IResponseDto } from '../models/user.model';
-
+import { ToastService } from '../services/toast.service';
 @Component({
   selector: 'app-coupon',
   templateUrl: './coupon.component.html',
@@ -19,7 +19,8 @@ export class CouponComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly couponService: CouponService
+    private readonly couponService: CouponService,
+    private readonly toastService: ToastService
   ) {
     this.couponForm = this.formBuilder.group({
       couponCode: ['', Validators.required],
@@ -38,7 +39,6 @@ export class CouponComponent implements OnInit {
       next: (response: IResponseDto<AddCouponDto[]>) => {
         this.coupons = response.result || [];
         console.log('Coupons:', this.coupons);
-        // this.filterBestCouponForAmount(30);
         this.isLoading = false;
       },
       error: (error) => {
@@ -57,7 +57,7 @@ export class CouponComponent implements OnInit {
     ); // Filter by minAmount condition
 
     if (validCoupons.length === 0) {
-      console.log('No valid coupon found for the specified amount.');
+      this.toastService.showToast("You don't qualify for any coupon.");
       return null;
     }
 
@@ -67,13 +67,13 @@ export class CouponComponent implements OnInit {
       validCoupons[0]
     );
 
-    console.log('Best coupon for the customer:', bestCoupon);
+    this.toastService.showToast(`Best coupon for the customer: ${bestCoupon.couponCode}`);
     return bestCoupon;
   }
 
   addCoupon() {
     if (this.couponForm.invalid) {
-      console.log('Invalid form');
+      this.toastService.showToast('Invalid form');
       return;
     }
     const newCoupon: AddCouponDto = this.couponForm.value;
@@ -101,6 +101,7 @@ export class CouponComponent implements OnInit {
 
   updateCoupon() {
     if (!this.editingCouponCode || this.couponForm.invalid) {
+      this.toastService.showToast('Invalid form, Kindly check the form');
       return;
     }
     const updatedCoupon: AddCouponDto = this.couponForm.value;
@@ -115,12 +116,12 @@ export class CouponComponent implements OnInit {
         },
         error: (error) => {
           this.errorMessage = error.message;
+          this.toastService.showToast(this.errorMessage!);
         },
       });
   }
 
   deleteCoupon(couponCode: string) {
-    // console.log('Deleting coupon:', couponCode);
     this.couponService.deleteCoupon(couponCode).subscribe({
       next: () => {
         this.coupons = this.coupons.filter((c) => c.couponCode !== couponCode);
@@ -128,6 +129,7 @@ export class CouponComponent implements OnInit {
       },
       error: (error) => {
         this.errorMessage = error.message;
+        this.toastService.showToast(this.errorMessage!);
       },
     });
   }

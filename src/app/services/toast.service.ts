@@ -6,8 +6,9 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class ToastService {
-  private toastSubject = new Subject<string>();
+  private readonly toastSubject = new Subject<string>();
   toastState = this.toastSubject.asObservable();
+  static showToast: any;
 
   showToast(message: string): void {
     this.toastSubject.next(message);

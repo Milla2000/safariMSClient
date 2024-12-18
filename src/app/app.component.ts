@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TourService } from './services/tour.service';
-import {  ITour, IToursandImagesResponseDto } from './models/tour.model';
+import { IToursandImagesResponseDto } from './models/tour.model';
 
 @Component({
   selector: 'app-root',

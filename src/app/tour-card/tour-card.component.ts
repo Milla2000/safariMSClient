@@ -3,6 +3,7 @@ import { TourService } from '../services/tour.service';
 import { IToursandImagesResponseDto, IAddTourDto } from '../models/tour.model';
 import { firstValueFrom } from 'rxjs';
 import { CloudinaryService } from '../services/cloudinary-signature.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-tour',
@@ -26,8 +27,9 @@ export class TourComponent implements OnInit {
   isStartDateSelected: boolean = false;
 
   constructor(
-    private tourService: TourService,
-    private cloudinaryService: CloudinaryService
+    private readonly tourService: TourService,
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -53,7 +55,7 @@ export class TourComponent implements OnInit {
         };
       });
     } catch (error) {
-      console.error('Error fetching tours:', error);
+      this.toastService.showToast('Error fetching tours');
     }
   }
 
@@ -77,12 +79,12 @@ export class TourComponent implements OnInit {
   async onSubmit(): Promise<void> {
     // Check if end date is greater than start date
     if (!this.isDateRangeValid(this.newTour.startDate, this.newTour.endDate)) {
-      alert('End date must be greater than start date.');
+      this.toastService.showToast('End date must be greater than start date.');
       return;
     }
 
     if (this.selectedFiles.length === 0) {
-      alert('Please select at least one image file.');
+      this.toastService.showToast('Please select at least one image file.');
       return;
     }
 
@@ -91,33 +93,28 @@ export class TourComponent implements OnInit {
       const signatureData = await firstValueFrom(
         this.cloudinaryService.getSignature()
       );
-
-      console.log('Signature data:', signatureData);
       const uploadPromises = this.selectedFiles.map((file) =>
         firstValueFrom(this.cloudinaryService.uploadImage(file, signatureData))
       );
 
       const imageUrls = await Promise.all(uploadPromises);
-      console.log('Image URLs:', imageUrls);
 
       // this.newTour.safariImages = imageUrls.map((url) => ({ image: url }));
       this.newTour.safariImages = imageUrls.map(
         (url) => url.secure_url || url.url
       );
 
-      console.log('New tour with images:', this.newTour.safariImages);
-
       await this.addTour();
     } catch (error) {
-      console.error('Error uploading images:', error);
+      this.toastService.showToast('Error uploading images');
     }
   }
 
   async addTour(): Promise<void> {
     try {
-      console.log('New tour:', this.newTour);
+    
       await firstValueFrom(this.tourService.addTour(this.newTour));
-      alert('Tour added successfully!');
+      this.toastService.showToast('Tour added successfully');
       await this.getTours();
       this.resetForm();
       this.showForm = false;

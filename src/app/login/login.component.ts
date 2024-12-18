@@ -35,13 +35,12 @@ export class LoginComponent {
       .subscribe((response: IResponseDto<ResultDto>) => {
         if (response.isSuccess) {
           // Login success
-          console.log('User logged in successfully', response);
           localStorage.setItem('token', response.result.token);
           localStorage.setItem('user', JSON.stringify(response.result.user));
           localStorage.setItem('role', response.result.role);
 
           const returnUrl =this.route.snapshot.queryParams['returnUrl'] || '/tour';
-          
+
           this.router.navigateByUrl(returnUrl);
 
         } else {
