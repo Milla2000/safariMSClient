@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CouponService } from '../services/coupon.service';
-import { AddCouponDto, ICouponResponseDto } from '../models/coupon.model';
+import { AddCouponDto } from '../models/coupon.model';
+import { IResponseDto } from '../models/user.model';
 
 @Component({
   selector: 'app-coupon',
@@ -34,7 +35,7 @@ export class CouponComponent implements OnInit {
   getCoupons() {
     this.isLoading = true;
     this.couponService.getAllCoupons().subscribe({
-      next: (response: ICouponResponseDto) => {
+      next: (response: IResponseDto<AddCouponDto[]>) => {
         this.coupons = response.result || [];
         console.log('Coupons:', this.coupons);
         // this.filterBestCouponForAmount(30);

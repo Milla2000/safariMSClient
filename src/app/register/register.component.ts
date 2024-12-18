@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { IUserDto, IResponseDto } from '../models/user.model';
+import { IUserDto, IResponseDto, ResultDto } from '../models/user.model';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +15,7 @@ export class RegisterComponent {
     phoneNumber: '',
     role: '',
   };
-  registrationResponse?: IResponseDto;
+  registrationResponse?: IResponseDto<ResultDto>;
 
   constructor(private readonly authService: AuthService) {}
 

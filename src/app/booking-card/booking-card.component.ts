@@ -6,8 +6,8 @@ import { HotelService } from '../services/hotel.service';
 import { IBookingDto } from '../models/booking.model';
 import { IHotel } from '../models/hotel.model';
 import { IStripeRequestDto } from '../models/stripe.model';
-import { AddCouponDto, ICouponResponseDto} from '../models/coupon.model';
-import { IResponseDto } from '../models/user.model';
+import { AddCouponDto } from '../models/coupon.model';
+import { IResponseDto, ResultDto } from '../models/user.model';
 import { CouponService } from '../services/coupon.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '../services/toast.service';
@@ -38,8 +38,8 @@ export class BookingCardComponent implements OnInit {
     private readonly hotelService: HotelService,
     private readonly router: Router,
     private readonly couponService: CouponService,
-    private toastService: ToastService
-  ) {}
+    private readonly toastService: ToastService
+  ) { }
 
   ngOnInit(): void {
     this.getCoupons();
@@ -111,7 +111,7 @@ export class BookingCardComponent implements OnInit {
     };
 
     try {
-      console.log('Booking data:', bookingData);
+      // console.log('Booking data:', bookingData);
       const response = await firstValueFrom(
         this.bookingService.addBooking(bookingData)
       );
@@ -124,14 +124,14 @@ export class BookingCardComponent implements OnInit {
   private handleBookingSuccess(response: any): void {
     this.bookingTotal = response.result.bookingTotalPrice;
     this.bookingId = response.result.bookingId;
-    console.log('Booking successful:', response);
+    // console.log('Booking successful:', response);
   }
 
   getCoupons() {
     this.couponService.getAllCoupons().subscribe({
-      next: (response: ICouponResponseDto) => {
+      next: (response: IResponseDto<AddCouponDto[]>) => {
         this.coupons = response.result || [];
-        console.log('Coupons:', this.coupons);
+        // console.log('Coupons:', this.coupons);
       },
       error: (error) => {
         this.errorMessage = error.message;
@@ -171,28 +171,25 @@ export class BookingCardComponent implements OnInit {
       );
       return;
     }
-    console.log('Applying coupon:', this.bestCouponCode, this.bookingId);
+
     this.bookingService
       .applyCoupon(this.bookingId, this.bestCouponCode)
       .subscribe({
-        next: (response: IResponseDto) => {
+        next: (response: IResponseDto<ResultDto>) => {
           if (response.isSuccess) {
             this.bookingTotal = response.result.total;
             this.toastService.showToast('Coupon applied successfully:');
-            this.couponApplied = true; 
+            this.couponApplied = true;
             this.errorMessage = '';
           } else {
             this.errorMessage = response.errormessage;
-            // console.log('Error applying coupon:', this.errorMessage);
             this.toastService.showToast(this.errorMessage);
           }
         },
         error: (response: HttpErrorResponse) => {
-          console.log('Error applying coupon:', response);
           this.errorMessage =
             response.error.errormessage || 'An error occurred';
           this.toastService.showToast(this.errorMessage);
-          console.log('Error applying coupon:', this.errorMessage);
         },
       });
   }
@@ -200,7 +197,7 @@ export class BookingCardComponent implements OnInit {
   // Add this method to handle payments
   async makePayment(): Promise<void> {
     if (!this.bookingId) {
-      console.error('Booking ID is missing');
+      this.toastService.showToast('Booking ID is missing');
       return;
     }
 
@@ -218,20 +215,26 @@ export class BookingCardComponent implements OnInit {
       );
 
       if (response.isSuccess) {
-        // Access stripeSessionUrl from result, assuming it is there
-        const result: any = response.result; // Cast result as 'any' to avoid TypeScript checking
-
-        if (result.stripeSessionUrl) {
-          window.location.href = result.stripeSessionUrl;
-          console.log('Redirecting to Stripe:', response);
+        console.log('Payment response:', response);
+        if (response.result.stripeSessionUrl) {
+          window.location.href = response.result.stripeSessionUrl;
         } else {
-          console.error('stripeSessionUrl is missing in response:', result);
+          this.toastService.showToast(
+            'stripeSessionUrl is missing in response:'
+          );
         }
       } else {
-        console.error('Payment failed:', response.errormessage);
+        this.toastService.showToast(response.errormessage);
       }
     } catch (error) {
-      console.error('Payment failed:', error);
+      if (error instanceof HttpErrorResponse) {
+        this.toastService.showToast(
+          `Error making payment: ${error.error.message || 'An error occurred'}`
+        );
+      
+      } else {
+        this.toastService.showToast('An unexpected error occurred');
+      }
     }
   }
 }

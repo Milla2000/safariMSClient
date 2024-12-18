@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { ILoginRequestDto, IResponseDto } from '../models/user.model';
+import { ToastService } from '../services/toast.service';
+import { ILoginRequestDto, IResponseDto, ResultDto } from '../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -30,7 +32,7 @@ export class LoginComponent {
   login(): void {
     this.authService
       .loginUser(this.loginDto)
-      .subscribe((response: IResponseDto) => {
+      .subscribe((response: IResponseDto<ResultDto>) => {
         if (response.isSuccess) {
           // Login success
           console.log('User logged in successfully', response);
@@ -38,13 +40,12 @@ export class LoginComponent {
           localStorage.setItem('user', JSON.stringify(response.result.user));
           localStorage.setItem('role', response.result.role);
 
-          // Use this.route.snapshot instead of this.router.snapshot
-          const returnUrl =
-            this.route.snapshot.queryParams['returnUrl'] || '/tour';
-          // this.route.routerState.queryParams['returnUrl'] || '/tour';
+          const returnUrl =this.route.snapshot.queryParams['returnUrl'] || '/tour';
+          
           this.router.navigateByUrl(returnUrl);
+
         } else {
-          console.error('Login failed:', response.errormessage);
+          this.toastService.showToast(`Login failed:, ${response.errormessage}`);
         }
       });
   }
@@ -52,12 +53,11 @@ export class LoginComponent {
   getUserData(): void {
     this.authService
       .getUserById(this.userId)
-      .subscribe((response: IResponseDto) => {
+      .subscribe((response: IResponseDto<ResultDto>) => {
         if (response.isSuccess) {
           this.userData = response.result;
-          console.log('User data:', this.userData);
         } else {
-          console.log('Failed to get user data:', response.errormessage);
+          this.toastService.showToast(`Failed to get user data:, ${response.errormessage}`);
         }
       });
   }

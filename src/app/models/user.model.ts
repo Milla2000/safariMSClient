@@ -6,19 +6,19 @@ export interface IUserDto {
     role?: string;
 }
 
-export interface IResponseDto {
+export interface IResponseDto<T> {
   errormessage: string;
-  result: {
-    token: string;
-    user: UserDto;
-    role: string;
-    message: string;
-    total: number;
-  };
-
+  result: T ;
   isSuccess: boolean;
 }
 
+export interface ResultDto {
+  token: string;
+  user: UserDto;
+  role: string;
+  message: string;
+  total: number;
+}
 
 
 export interface ILoginRequestDto{
@@ -33,12 +33,6 @@ export interface UserDto {
         PhoneNumber: string;
 }
 
-
-// export interface LoginResponseDto{
-//     Token: string;
-//     User: UserDto;
-//     Role: string;
-// }
 
 
 export interface AssignRoleDto {

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IAddTourDto} from '../models/tour.model'; 
-
+import { IAddTourDto, IToursandImagesResponseDto } from '../models/tour.model';
+import { IResponseDto, ResultDto } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,22 +12,25 @@ export class TourService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getAllTours(): Observable<any> {
-    return this.http.get<any>(this.apiUrl + '/getAllTours');
+  getAllTours(): Observable<IResponseDto<IToursandImagesResponseDto[]>> {
+    return this.http.get<IResponseDto<IToursandImagesResponseDto[]>>(
+      this.apiUrl + '/getAllTours'
+    );
   }
 
-  addTour(tourData: IAddTourDto): Observable<any> {
+  addTour(tourData: IAddTourDto): Observable<IResponseDto<IToursandImagesResponseDto[]>> {
     return this.http.post<any>(`${this.apiUrl + '/AddNewTour'}`, tourData);
   }
 
-  getTourById(id: string): Observable<any> {
+  getTourById(id: string): Observable<IResponseDto<IToursandImagesResponseDto>> {
     return this.http.get<any>(`${this.apiUrl + '/getATour'}/${id}`);
   }
 
-  addImages(tourId: string, imageUrls: string[]): Observable<any> {
+  addImages(tourId: string, imageUrls: string[]): Observable<IResponseDto<ResultDto>> {
     // Convert image URLs to AddTourImageDto
     const payload = imageUrls.map((imageUrl) => ({ image: imageUrl }));
-    return this.http.post(
+
+    return this.http.post<IResponseDto<ResultDto>>(
       `https://localhost:7032/api/Images/${tourId}`,
       payload
     );

@@ -7,6 +7,7 @@ import {
   ILoginRequestDto,
   IResponseDto,
   IUserDto,
+  ResultDto,
   // LoginResponseDto,
 } from '../models/user.model';
 
@@ -18,34 +19,36 @@ export class AuthService {
 
   constructor(private readonly http: HttpClient) {}
 
-  registerUser(registerUserDto: IUserDto): Observable<IResponseDto> {
-    return this.http.post<IResponseDto>(`${this.apiUrl}`, registerUserDto).pipe(
-      map((response: IResponseDto) => {
-        return response;
-      })
-    );
-  }
-
-  loginUser(loginRequestDto: ILoginRequestDto): Observable<IResponseDto> {
-    return this.http.post<IResponseDto>(
-      `${this.apiUrl}/login`,
-      loginRequestDto
-    );
-  }
-
-  assignRole(assignRoleDto: AssignRoleDto): Observable<IResponseDto> {
+  registerUser(registerUserDto: IUserDto): Observable<IResponseDto<ResultDto>> {
     return this.http
-      .post<IResponseDto>(`${this.apiUrl}/AssignRole`, assignRoleDto)
+      .post<IResponseDto<ResultDto>>(`${this.apiUrl}`, registerUserDto)
       .pipe(
-        map((response: IResponseDto) => {
+        map((response: IResponseDto<ResultDto>) => {
           return response;
         })
       );
   }
 
-  getUserById(id: string): Observable<IResponseDto> {
-    return this.http.get<IResponseDto>(`${this.apiUrl}/${id}`).pipe(
-      map((response: IResponseDto) => {
+  loginUser(loginRequestDto: ILoginRequestDto): Observable<IResponseDto<ResultDto>> {
+    return this.http.post<IResponseDto<ResultDto>>(
+      `${this.apiUrl}/login`,
+      loginRequestDto
+    );
+  }
+
+  assignRole(assignRoleDto: AssignRoleDto): Observable<IResponseDto<ResultDto>> {
+    return this.http
+      .post<IResponseDto<ResultDto>>(`${this.apiUrl}/AssignRole`, assignRoleDto)
+      .pipe(
+        map((response: IResponseDto<ResultDto>) => {
+          return response;
+        })
+      );
+  }
+
+  getUserById(id: string): Observable<IResponseDto<ResultDto>> {
+    return this.http.get<IResponseDto<ResultDto>>(`${this.apiUrl}/${id}`).pipe(
+      map((response: IResponseDto<ResultDto>) => {
         return response;
       })
     );

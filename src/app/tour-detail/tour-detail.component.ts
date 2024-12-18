@@ -3,12 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CloudinaryService } from '../services/cloudinary-signature.service';
 import { TourService } from '../services/tour.service';
 import { HotelService } from '../services/hotel.service';
-import { IHotelResponseDto, IAddHotelDto, IHotel } from '../models/hotel.model';
+import { IAddHotelDto, IHotel } from '../models/hotel.model';
 import {
   IToursandImagesResponseDto,
   ITourImageDto,
 } from '../models/tour.model';
 import { firstValueFrom } from 'rxjs';
+import { IResponseDto } from '../models/user.model';
 
 @Component({
   selector: 'app-tour-detail',
@@ -18,7 +19,7 @@ import { firstValueFrom } from 'rxjs';
 export class TourDetailComponent implements OnInit {
   tour: IToursandImagesResponseDto | null = null;
   hotels: IHotel[] = [];
-  fullHotelResponse: IHotelResponseDto | null = null;
+  fullHotelResponse: IResponseDto<IHotel[]> | null = null;
   tourId: string | null = null;
   // isAddImageModalOpen: boolean = false;
   // isAddHotelModalOpen: boolean = false;
@@ -58,7 +59,7 @@ export class TourDetailComponent implements OnInit {
         this.tourService.getTourById(this.tourId!)
       );
       this.tour = data.result;
-      console.log('Tour:', this.tour);
+      console.log('Tourz:', this.tour);
     } catch (error) {
       console.error('Error fetching tour:', error);
     }

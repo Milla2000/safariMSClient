@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'; // To capture the hotel Id from the URL or route params
 import { HotelService } from '../services/hotel.service';
 import { firstValueFrom } from 'rxjs';
-import { IHotelResponseDto } from '../models/hotel.model';
+import { IHotel } from '../models/hotel.model';
+import { IResponseDto } from '../models/user.model';
+// import { IHotelResponseDto } from '../models/hotel.model';
 
 @Component({
   selector: 'app-hotel-card',
@@ -10,7 +12,7 @@ import { IHotelResponseDto } from '../models/hotel.model';
   styleUrls: ['./hotel-card.component.css'],
 })
 export class HotelCardComponent implements OnInit {
-  hotel: IHotelResponseDto | null = null; // Single hotel data
+  hotel: IResponseDto<IHotel[]> | null = null; // array of hotels
   hotelId: string | null = null; // Hotel Id captured from route
   constructor(
     private readonly hotelService: HotelService,
@@ -26,13 +28,16 @@ export class HotelCardComponent implements OnInit {
 
   async getHotel(id: string): Promise<void> {
     try {
-      const data = await firstValueFrom(this.hotelService.getHotelById(id));
-      this.hotel = {
+      const hotelData= await firstValueFrom(this.hotelService.getHotelById(id));
+      const hotelWithRating = hotelData.result.map((hotel) => ({
+        ...hotel,
         rating: 4.5,
         reviews: 120,
-        errormessage: data.errormessage,
-        result: data.result,
-        isSuccess: data.isSuccess,
+      }));
+      this.hotel = {
+        errormessage: hotelData.errormessage,
+        result: hotelWithRating,
+        isSuccess: hotelData.isSuccess,
       };
       console.log('Hotel:', this.hotel);
     } catch (error) {

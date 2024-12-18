@@ -5,8 +5,8 @@ export interface AddCouponDto {
   id: string;
 }
 
-export interface ICouponResponseDto {
-  errormessage: string;
-  result: AddCouponDto[];
-  isSuccess: boolean;
-}
+// export interface ICouponResponseDto {
+//   errormessage: string;
+//   result: AddCouponDto[];
+//   isSuccess: boolean;
+// }
