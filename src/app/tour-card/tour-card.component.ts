@@ -99,7 +99,7 @@ export class TourComponent implements OnInit {
 
       const imageUrls = await Promise.all(uploadPromises);
 
-      // this.newTour.safariImages = imageUrls.map((url) => ({ image: url }));
+     
       this.newTour.safariImages = imageUrls.map(
         (url) => url.secure_url || url.url
       );

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookingService } from '../services/booking.service'; // Adjust the path as necessary
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators'; // RxJS finalize operator
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-validate-payment',
@@ -17,7 +18,8 @@ export class ValidatePaymentComponent implements OnInit {
   constructor(
     private readonly bookingService: BookingService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -55,21 +57,22 @@ export class ValidatePaymentComponent implements OnInit {
   }
 
   private handleSuccess(result: any): void {
-    this.isSuccess = true; // Mark validation as successful
-    this.errorMessage = null; // Clear error message
+    this.isSuccess = true; 
+    this.errorMessage = null; 
     console.log('Payment validation successful:', result);
+    this.toastService.showToast(`Payment validation successful `);
   }
 
   private handleFailure(message: string): void {
     this.isSuccess = false; // Mark validation as failed
     this.errorMessage = message;
-    console.error('Payment validation failed:', message);
+    this.toastService.showToast(`Payment validation failed: ${message}`);
   }
 
   private startLoading(): void {
     this.isLoading = true;
     this.isSuccess = false;
-    this.errorMessage = null; // Reset states before loading
+    this.errorMessage = null; 
   }
 
   private stopLoading(): void {

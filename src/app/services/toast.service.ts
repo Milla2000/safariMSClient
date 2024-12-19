@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 export class ToastService {
   private readonly toastSubject = new Subject<string>();
   toastState = this.toastSubject.asObservable();
-  static showToast: any;
+  static readonly showToast: any;
 
   showToast(message: string): void {
     this.toastSubject.next(message);
